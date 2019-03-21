@@ -1,11 +1,12 @@
 ---
 title: Terminus Manual
 subtitle: Extend with Plugins
+description: Use plugins to extend what you can do with Terminus.
 terminuspage: true
 type: terminuspage
 layout: terminuspage
 nexturl: terminus/plugins/directory/
-previousurl: terminus/commands/
+previousurl: terminus/scripting/
 permalink: docs/terminus/:basename/
 image: terminus-thumbLarge
 searchboost: 100

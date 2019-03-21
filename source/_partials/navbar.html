@@ -23,6 +23,9 @@
           if(/\/commands.*/.test(aaObj[i].href)>=1) {
             $('#docs-terminus').removeClass('active-trail');
           }
+          if(/\/scripting.*/.test(aaObj[i].href)>=1) {
+            $('#docs-terminus').removeClass('active-trail');
+          }
           if(/\/releases.*/.test(aaObj[i].href)>=1) {
             $('#docs-terminus').removeClass('active-trail');
           }
@@ -239,6 +242,37 @@
     window.addEventListener("load", setActivetrail);
 </script>
 {% endif %}
+{% if page.woocommerce %}
+<script type="text/javascript">
+    function setActivetrail() {
+        aaObj = document.getElementById('manual-guide-toc').getElementsByTagName('a');
+        for(i=0;i<aaObj.length;i++) {
+            if(document.location.href.indexOf(aaObj[i].href)>=0 ){
+                aaObj[i].className='active-trail';
+                if(/\/store-setup.*/.test(aaObj[i].href)>=1) {
+                    $('#docs-guides-woocommerce').removeClass('active-trail');
+                }
+                if(/\/configure.*/.test(aaObj[i].href)>=1) {
+                    $('#docs-guides-woocommerce').removeClass('active-trail');
+                }
+                if(/\/commit.*/.test(aaObj[i].href)>=1) {
+                    $('#docs-guides-woocommerce').removeClass('active-trail');
+                }
+                if(/\/initialize-prod.*/.test(aaObj[i].href)>=1) {
+                    $('#docs-guides-woocommerce').removeClass('active-trail');
+                }
+                if(/\/develop.*/.test(aaObj[i].href)>=1) {
+                    $('#docs-guides-woocommerce').removeClass('active-trail');
+                }
+                if(/\/launch.*/.test(aaObj[i].href)>=1) {
+                    $('#docs-guides-woocommerce').removeClass('active-trail');
+                }
+            }
+        }
+    }
+    window.addEventListener("load", setActivetrail);
+</script>
+{% endif %}
 <script>
 var terminusCompareApp = angular.module('terminusCompareApp', ['ngMaterial']);
 var terminusLatestRelease = angular.module("terminusLatestReleaseApp", ['yaru22.md']);
@@ -319,6 +353,16 @@ terminusCommandsApp.filter('search', function() {
   return filtered;
 }
 });
+
+//Replace commas with new lines, to be used when printing field descriptions
+terminusCommandsApp.filter('formatFields', [function() {
+    return function(string) {
+        if (!angular.isString(string)) {
+            return string;
+        }
+        return string.replace(":", ": \n").replace(/,/g, '\n');
+    };
+}])
 
 
 terminusCompareApp.config(function($interpolateProvider) {

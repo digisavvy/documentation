@@ -32,17 +32,19 @@ $ terminus aliases
 ```
 
 ### Download Using the Dashboard
+
+![Link to Pantheon Drush Aliases](/source/docs/assets/images/dashboard/drush-aliases.png)
+
 Download your Pantheon site aliases to manually update your local aliases file:
 
-1. From your Pantheon User Dashboard, click **Sites** > **Download all Drush aliases**
-2. Move the generated `pantheon.aliases.drushrc.php` into your local drush root directory (e.g. `$HOME/.drush`).
+1. From your Pantheon User Dashboard, click **Sites** > **Drush Aliases**
+2. Move the generated `pantheon.aliases.drushrc.php` into your local Drush root directory (e.g. `$HOME/.drush`).
 3. Clear Drush cache:
 
  ```
  drush cc drush
  ```
 
-![Link to Pantheon Drush Aliases](/source/docs/assets/images/dashboard/drush-aliases.png)
 If you add a site to your account, you will have to download a new copy of your Drush aliases.
 
 ### List Available Site Aliases
@@ -343,6 +345,7 @@ This indicates that the vendor directory contains Drush binaries that should be 
   - `sql-sync-pipe`. Use `sql-sync` instead.
   - `sql-cli` (`sqlc`) and `sql-query` (`sqlq`) See: [Run SQL Queries Using Drush on Pantheon](#run-sql-queries-using-drush-on-pantheon)
   - `php-eval` (`eval`, `ev`) See: [Execute PHP Code Using Drush on Pantheon](#execute-php-code-using-drush-on-pantheon)
+- Due to our highly available architecture, Drush `sql-sync` cannot currently be executed on the live environment with more than 1 application container. We recommend you use terminus or `sql-sync` a multidev, dev or test environment which only has 1 application container.
 - Drush may fail if the `['uri']` array key has a different domain than what is expected by Drupal, resulting in the following error:
 
  ```bash

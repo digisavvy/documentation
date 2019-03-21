@@ -27,7 +27,7 @@ The server timezone and all log timestamps are in UTC (Coordinated Universal Tim
       <tr>
         <th>nginx-access.log</th>
         <td>Up to 60 days of logs</td>
-        <td  markdown="1">Webserver access log. **Do not consider canonical**, as this will be wiped if the application server is reset or rebuilt. See <a href="/docs/nginx-access-log">Parsing nginx Access Logs with GoAccess</a>.</td>
+        <td  markdown="1">Webserver access log. **Do not consider canonical**, as this will be wiped if the application container is reset or rebuilt. See <a href="/docs/nginx-access-log">Parsing nginx Access Logs with GoAccess</a>.</td>
       </tr>
       <tr>
         <th>nginx-error.log</th>
@@ -35,7 +35,7 @@ The server timezone and all log timestamps are in UTC (Coordinated Universal Tim
         <td>Webserver error log.</td>
       </tr>
       <tr>
-        <th>php-error.log <a class="pop" rel="popover" data-proofer-ignore data-toggle="popover" data-html="true" data-content="Fatal errors from PHP error log is provided in each environment on the <strong>Errors</strong> tab of the Site Dashboard. Lower priority php errors are only in the php error log or in the application logs (watchdog on Drupal, WP_DEBUG for WordPress). For details, see <a href='/docs/php-errors'>PHP Errors and Exceptions</a>."><em class="fa fa-info-circle"></em></a></th>
+        <th>php-error.log <a class="pop" rel="popover" data-proofer-ignore data-toggle="popover" data-html="true" data-content="Fatal errors from PHP error log are provided in each environment on the <strong>Errors</strong> tab of the Site Dashboard. Lower priority PHP errors are only in the PHP error log or in the application logs (watchdog on Drupal, WP_DEBUG for WordPress). For details, see <a href='/docs/php-errors'>PHP Errors and Exceptions</a>."><em class="fa fa-info-circle"></em></a></th>
         <td>1MB of log data</td>
         <td>PHP <a href="https://secure.php.net/manual/en/book.errorfunc.php">fatal error log</a>; will not contain stack overflows. Fatal errors from this log are also shown in the Dashboard.</td>
       </tr>
@@ -67,11 +67,11 @@ The server timezone and all log timestamps are in UTC (Coordinated Universal Tim
     </tbody>
   </table>
 
-Rotated log files are archived within the `/logs` directory on application servers and database servers (e.g. `/logs/nginx-access.log-20160617.gz` or `/logs/mysqld-slow-query.log-20160606`).
+Rotated log files are archived within the `/logs` directory on application containers and database servers (e.g. `/logs/nginx-access.log-20160617.gz` or `/logs/mysqld-slow-query.log-20160606`).
 
 <div class="alert alert-info">
 <h4 class="info">Note</h4>
-<p markdown="1">When appservers are migrated as a regular part of platform maintenance, log files are destroyed as they are appserver-specific.  Consider <a href="/#automate-downloading-logs" data-proofer-ignore>automating the collection</a> of logs regularly to maintain historical log data.</p>
+<p markdown="1">When appservers are migrated as a regular part of platform maintenance, log files are destroyed as they are appserver-specific.  Consider <a href="#automate-downloading-logs" data-proofer-ignore>automating the collection</a> of logs regularly to maintain historical log data.</p>
 </div>
 
 ## Access Logs Via SFTP
@@ -121,9 +121,11 @@ You now have a local copy of the logs directory, which contains the following:
  ```
 
 4. Run the following SFTP command in terminal:
-```nohighlight
-get -r logs
-```
+
+ ```nohighlight
+ get -r logs
+ ```
+
 You now have a local copy of the logs directory, which contains the following:
 ```nohighlight
 ├── logs
@@ -135,7 +137,7 @@ You now have a local copy of the logs directory, which contains the following:
 
 You can automate the process of accessing and maintaining these logs with a simple script.
 
-### Create A Script
+### Create a Script
 Open your local terminal to create and access a new local directory:
 ```bash
 mkdir $HOME/site-logs
@@ -196,31 +198,67 @@ No, access to Apache Solr logs is not available. For more information on debuggi
 No, Varnish logs are not available for download.
 
 ### How do I enable error logging for WordPress?
-Enable the [WP_DEBUG and WP_DEBUG_LOG](https://codex.wordpress.org/Debugging_in_WordPress) constants on Development environments (Dev and Multidevs) to write errors to `wp-content/debug.log` and show all PHP errors, notices, and warnings on the page. We suggest setting the WordPress debugging constants per environment:
-<script src="//gist-it.appspot.com/https://github.com/pantheon-systems/pantheon-settings-examples/blob/master/wordpress/wp-debug-expanded.wp-config.php?footer=minimal"></script>
-Writing to `wp-content/debug.log` is not supported on Test or Live environments.
+
+<div class="alert alert-danger" role="alert" markdown="1">
+#### Warning {.info}
+The steps in this section enable debug logging. Debug logging increases resource overhead and presents a security risk. It is not recommended for production environments.
+
+To minimize risk exposure, especially in a Live environment, disable debug logging when you are done.
+</div>
+
+Enable the [WP_DEBUG and WP_DEBUG_LOG](https://codex.wordpress.org/Debugging_in_WordPress) constants on Development environments (Dev and Multidevs) to write errors to `wp-content/debug.log` and show all PHP errors, notices, and warnings on the page. We suggest setting the WordPress debugging constants per environment in `wp-config.php`:
+
+```php
+// All Pantheon Environments.
+if (defined('PANTHEON_ENVIRONMENT')) {
+  //WordPress debug settings in development environments.
+  if (!in_array(PANTHEON_ENVIRONMENT, array('test', 'live'))) {
+    // Debugging enabled.
+    if (!defined( 'WP_DEBUG' )) {
+    define( 'WP_DEBUG', true );
+    }
+    ini_set('log_errors','On');
+    ini_set('display_errors','On');
+    ini_set('error_reporting', E_ALL );
+    define( 'WP_DEBUG_LOG', true ); // Stored in wp-content/debug.log by default.
+    ini_set( 'error_log', WP_CONTENT_DIR . '/uploads/debug.log' ); // Optionally overrides the debug.log location to a writable path.
+    define( 'WP_DEBUG_DISPLAY', true );
+  }
+  // WordPress debug settings in test and live environments.
+  else {
+    // Debugging disabled.
+    ini_set('log_errors','Off');
+    ini_set('display_errors','Off');
+    define('WP_DEBUG', false);
+    define('WP_DEBUG_LOG', false);
+    define('WP_DEBUG_DISPLAY', false);
+  }
+}
+```
+
+By default, the WordPress debug log path is set to `/wp-content/` and is not writable on Test or Live environments. This can be overridden to the <a href="/docs/wp-config-php/#how-do-i-change-the-default-debuglog-location" data-proofer-ignore>`/wp-content/uploads/` folder</a>.
 
 ### How can I access the Drupal event log?
 
-By default, Drupal logs events using the Database Logging module (dblog). PHP fatal errors sometimes can be found in these logs, depending on how much Drupal bootstrapped. You can access the event logs in a couple ways:
+By default, Drupal logs events using the Database Logging module (dblog). PHP fatal errors can sometimes be found in these logs, depending on how much Drupal bootstrapped. You can access the event logs in a couple ways:
 
-1. Visit `/admin/reports/dblog` once you've logged in as administrator.
-2. Using [Terminus](/docs/terminus/):
+* Visit `/admin/reports/dblog` once you've logged in as administrator.
+* Using [Terminus](/docs/terminus/):
 
-```bash
-terminus drush <site>.<env> -- watchdog-show
-```
+ ```bash
+ terminus drush <site>.<env> -- watchdog-show
+ ```
 
-Terminus can invoke Drush commands to "watch" events in real-time; tail can be used to continuously show new watchdog messages until interrupted (Control+C).
+ * Terminus can invoke Drush commands to "watch" events in real-time; `--tail` can be used to continuously show new watchdog messages until  interrupted (Control+C).
 
-```bash
-terminus drush <site>.<env> -- watchdog-show --tail
-```
+        ```bash
+        terminus drush <site>.<env> -- watchdog-show --tail
+        ```
 
-<div class="alert alert-info">
-<h4 class="info">Note</h4>
-<p>At this time, <code>terminus drush "watchdog-show --tail"</code> is supported in 0.13.x versions and below, and not yet supported in Terminus 1.x.</p>
-</div>
+        <div class="alert alert-info">
+        <h4 class="info">Note</h4>
+        <p>At this time, <code>terminus drush "watchdog-show --tail"</code> is supported in 0.13.x versions and below, and not yet supported in  Terminus 1.x.</p>
+        </div>
 
 ### My Drupal database logs are huge. Should I disable dblog?
 
@@ -243,7 +281,8 @@ sftp -o Port=2222 live.$SITE_UUID@$app_server << !
 !
 done
 ```
-Adjust to `appserver.test.$SITE_UUID.drush.in` to pull logs from Test.
+- Adjust to `appserver.test.$SITE_UUID.drush.in` to pull logs from Test.
+- Adjust to `mget *` to include archived log files.
 
 ## See Also
 - [MySQL Slow Log](/docs/mysql-slow-log/)

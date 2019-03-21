@@ -1,6 +1,7 @@
 ---
 title: Build Tools
 subtitle: Add a New Module
+description: In step five of the Build Tools guide, learn how to add new modules to your site.
 buildtools: true
 anchorid: extend
 generator: pagination
@@ -19,7 +20,7 @@ image: buildToolsGuide-thumb
 Next, we'll add a module to our existing `slogan` branch using Composer. You should already have a Pull Request open for this branch in GitHub, [created in a previous lesson](/docs/guides/build-tools/new-pr/).
 
 ## Local Setup
-The next section will be done from the command line, to prepare your local:
+This section will be performed from the command line, to prepare your local system.
 
 1. Navigate to the **Code** tab of the GitHub repository, then click **Clone or download** and copy the repository URL:
 

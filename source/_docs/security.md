@@ -38,6 +38,8 @@ To verify that everything is working correctly, visit the URL of the environment
 
 ![Locked site example](/source/docs/assets/images/auth-required.png)
 
+### Customize Lock Page
+
 If you'd like to customize the lock page that displays beneath the authentication form, you can add a `locked.html` file in your site's root directory.
 
 ## Unlock a Site's Environment
@@ -60,6 +62,10 @@ terminus lock:disable <site>:<env>
 ```
 
 ## Troubleshooting
+
+### Authentication Prompt Appears in Environments Where It's Not Enabled
+
+If you see an authentication prompt for a different environment (for example, a Dev site authentication prompt on the Test environment), you likely have assets, such as images, loading from a locked environment. Inspect your page source code and search for the locked environment's URL (e.g `dev-yoursite.pantheonsite.io`), then replace that with the correct URL for the current environment.
 
 ### Drupal HTTP Authentication Module
 

@@ -1,8 +1,8 @@
 ---
 title: Manage Some Dependencies with Composer
 description: Get your feet wet with Composer on WordPress or Drupal 7 before going all in.
-contributors: [rachelwhitton, dustinleblanc]
-tags: [automation, workflow, moreguides]
+contributors: [rachelwhitton, dustinleblanc, wbconnor, sarahg]
+tags: [automation, workflow, moreguides, composer]
 type: guide
 permalink: docs/guides/:basename/
 ---
@@ -40,21 +40,32 @@ Use the `init` command to create a `composer.json` file that includes the approp
   <div class="tab-content">
     <!-- Active pane content -->
     <div role="tabpanel" class="tab-pane active" id="wp-init" markdown="1">
-    1. Initialize composer to create a `composer.json` file with the WordPress package repository:
+1. If you haven't done so already, [clone your Pantheon site repository](/docs/git/#clone-your-site-codebase) and navigate to the project's root directory. Replace `<site_name>` with your site's name (e.g., `your-awesome-site`):
 
-      ```command
-      composer init --repository=https://wpackagist.org --no-interaction
+      ```bash
+      SITE=<site_name>
+      `terminus connection:info $SITE.dev --fields='Git Command' --format=string`
+      cd $SITE
       ```
+2. Initialize composer to create a `composer.json` file with the WordPress package repository:
 
-    2. Edit the `composer.json` to add extra configuration that specifies installation paths for WordPress plugins and themes:
+     ```command
+     composer init --repository=https://wpackagist.org --no-interaction
+     ```
+3. Edit the `composer.json` to add extra configuration that specifies installation paths for WordPress plugins and themes.
 
-      ```json
-      {
+          <div class="alert alert-info" role="alert">
+            <h4 class="info">Note</h4>
+            <p markdown="1">Since Pantheon does not support Git submodules <a class="pop" rel="popover" data-proofer-ignore data-toggle="popover" data-html="true" data-title="Git submodules" data-content="Some Composer packages are added as Git submodules, which place a Git repository within a subdirectory of your site’s repository."><em class="fa fa-info-circle"></em></a>, we recommend using the provided script `remove-git-submodules` to remove any `.git` directories upon install and update.</p>
+          </div>
+
+        ```json
+        {
           "repositories": [
-              {
-                  "type": "composer",
-                  "url": "https://wpackagist.org"
-              }
+            {
+              "type": "composer",
+              "url": "https://wpackagist.org"
+            }
           ],
           "require": {},
           "extra": {
@@ -62,77 +73,64 @@ Use the `init` command to create a `composer.json` file that includes the approp
               "wp-content/plugins/{$name}/": ["type:wordpress-plugin"],
               "wp-content/themes/{$name}/": ["type:wordpress-theme"]
             }
+          },
+          "scripts": {
+            "remove-git-submodules": "find . -mindepth 2 -type d -name .git | xargs rm -rf",
+            "post-install-cmd": [
+              "@remove-git-submodules"
+            ],
+            "post-update-cmd": [
+              "@remove-git-submodules"
+            ]
           }
-      }
-      ```
+        }
+        ```
+4. Commit the `composer.json` file to version control with Git:
 
-    3. Commit the `composer.json` file to version control with Git:
+     ```command
+     git add composer.json
+     ```
 
-      ```command
-      git add composer.json
-      ```
+     ```command
+     git commit -m "Create composer.json with WP repo and install paths"
+     ```
+5. Push your new file to Pantheon:
 
-      ```command
-      git commit -m "Create composer.json with WP repo and install paths"
-      ```
-
-    4. Push your new file to Pantheon:
-
-      ```command
-      git push origin master
-      ```
-    </div>
-
-    <!-- 2nd pane content -->
-    <div role="tabpanel" class="tab-pane" id="d7-init" markdown="1">
-    1. Initialize composer to create a `composer.json` file with the Drupal 7 package repository:
-
-      ```command
-      composer init --repository=https://packages.drupal.org/7 --no-interaction
-      ```
-
-    2. Edit the `composer.json` to add extra configuration that specifies installation paths for Drupal modules, libraries, and themes:
-
-      ```json
-      {
-          "repositories": [
-              {
-                  "type": "composer",
-                  "url": "https://packages.drupal.org/7"
-              }
-          ],
-          "require": {},
-          "extra": {
-            "installer-paths": {
-              "sites/all/modules/{$name}/": ["type:drupal-module"],
-              "sites/all/themes/{$name}/": ["type:drupal-theme"],
-              "sites/all/libraries/{$name}/": ["type:drupal-library"]
-            }
-          }
-      }
-      ```
-
-    3. Commit the `composer.json` file to version control with Git:
-
-      ```command
-      git add composer.json
-      ```
-
-      ```command
-      git commit -m "Create composer.json with D7 repo and install paths"
-      ```
-
-    4. Push your new file to Pantheon:
-
-      ```command
-      git push origin master
-      ```
-    </div>
+     ```command
+     git push origin master
+     ```
   </div>
+
+  <!-- 2nd pane content -->
+  <div role="tabpanel" class="tab-pane" id="d7-init" markdown="1">
+1. If you haven't done so already, [clone your Pantheon site repository](/docs/git/#clone-your-site-codebase) and navigate to the project's root directory. Replace `<site_name>` with your site's name (e.g., `your-awesome-site`):
+
+    ```bash
+    SITE=<site_name>
+    `terminus connection:info $SITE.dev --fields='Git Command' --format=string`
+    cd $SITE
+    ```
+{% include("content/d7-composer-init.html")%}
+4. Commit the `composer.json` file to version control with Git:
+
+    ```command
+    git add composer.json
+    ```
+
+    ```command
+    git commit -m "Create composer.json with D7 repo and install paths"
+    ```
+5. Push your new file to Pantheon:
+
+    ```command
+    git push origin master
+    ```
+  </div>
+</div>
 
 Anything you aren't managing with Composer is installed and maintained using the standard techniques such as using the WordPress or Drupal admin interfaces. Continue applying one-click core updates from Pantheon in the Site Dashboard.
 
-## Require Dependencies  
+## Require Dependencies
 Use the `require` command to add new dependencies to your project, such as libraries or themes. This command modifies your `composer.json` file by including the specified dependency and it's compatible version.
 
 <!-- Nav tabs -->
@@ -174,7 +172,7 @@ Use the `require` command to add new dependencies to your project, such as libra
 
     ```command
     git push origin master
-    ```  
+    ```
   5. Navigate to the **<span class="glyphicons glyphicons-wrench"></span> Dev** environment of the Site Dashboard.
   6. Click the **Site Admin <span class="glyphicons glyphicons-new-window-alt"></span>** button and login.
   7. Navigate to **Plugins** and activate Pantheon Advanced Page Cache.
@@ -213,7 +211,7 @@ Use the `require` command to add new dependencies to your project, such as libra
 
     ```command
     git push origin master
-    ```  
+    ```
   </div>
 </div>
 

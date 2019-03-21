@@ -4,6 +4,7 @@ subtitle: Introduction
 description: Overview of WordPress multisite support on the Pantheon Platform.
 layout: guide
 type: guide
+featuredcontributor: true
 contributors: [danielbachhuber]
 anchorid: multisite
 multisite: true
@@ -16,6 +17,7 @@ permalink: docs/guides/multisite/
 nexturl: guides/multisite/considerations/
 editpath: multisite/01-introduction.md
 image: multisite
+guidetoc: true
 ---
 This guide covers the process of requesting, configuring, and maintaining a new WordPress Site Network on Pantheon. We'll also explore supported use cases, considerations and some common troubleshooting tips.
 
@@ -36,9 +38,9 @@ We do not support uses of WordPress Site Networks that run functionally-differen
 
 - Software as a service (SAAS) products
 - Agencies using one WordPress installation to support several customers
-- WordPress Multi-Network installations 
+- WordPress Multi-Network installations
 
 ## Request a WordPress Site Network
-Running a WordPress Site Network requires a special configuration that is only available on Elite plans. Only Pantheon employees have the ability to create the sites and add you to the team. Existing WordPress sites cannot be converted to a network, however they can be [migrated](/docs/migrate-wordpress-site-networks/).
+Running a WordPress Site Network requires a special configuration that is only available to Elite customers. Only Pantheon employees have the ability to create the sites and add you to the team. Existing WordPress sites cannot be converted to a network, however they can be [migrated](/docs/migrate-wordpress-site-networks/).
 
-[Complete this form](https://pantheon.io/pantheon-elite-plans){.external} or reach out to your existing account manager to request a new WordPress Site Network be created for you. Once an employee of Pantheon has created the network, you will receive an email informing you that you've been added to the site.
+Reach out to your existing account manager to request a new WordPress Site Network be created for you. Once an employee of Pantheon has created the network, you will receive an email informing you that you've been added to the site. If you don't have an account manager, you can [contact sales](https://pantheon.io/contact-us){.external}.

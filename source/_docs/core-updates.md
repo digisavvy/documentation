@@ -2,11 +2,16 @@
 title: WordPress and Drupal Core Updates
 description: Detailed information on applying and debugging upstream updates from Pantheon or a Custom Upstream.
 tags: [dashboard, devterminus, git]
-categories: []
+contributors: [cityofoaksdesign, rachelwhitton, alexfornuto]
 ---
 Pantheon maintains core upstream repositories for [WordPress](https://github.com/pantheon-systems/wordpress), [Drupal 8](https://github.com/pantheon-systems/drops-8), and [Drupal 7](https://github.com/pantheon-systems/drops-7) which act as a parent repository to site repositories. Updates made by Pantheon in the core upstream repository, in addition to [updates made by maintainers of Custom Upstreams](/docs/maintain-custom-upstream/), become available downstream as a one-click update.
 
-Apply one-click updates to individual sites repositories using the Site Dashboard on Pantheon, via [Terminus](/docs/terminus), or manually from the command line. Do not update core using the WordPress Dashboard, Drush, or WP-CLI; you will overwrite your core. For additional details, see [Scope of Support](/docs/getting-support/#scope-of-support).
+Apply one-click updates to individual sites repositories using the Site Dashboard on Pantheon, via [Terminus](/docs/terminus), or manually from the command line. Do not update core using the WordPress Dashboard, Drush, or WP-CLI; you will overwrite your core. For additional details, see [Scope of Support](/docs/support/#scope-of-support).
+
+<div class="alert alert-info">
+<h4 class="info">Note</h4>
+  <p markdown="1">Sites managing core with Composer are not compatible with Pantheon's One-click updates and must update core using Composer exclusively. For instructions, see [Build Tools](/docs/guides/build-tools/update/) or [Drupal 8 and Composer on Pantheon Without Continuous Integration](/docs/guides/drupal-8-composer-no-ci/#update-only-drupal-core).</p>
+</div>
 
 ## Apply Upstream Updates via the Site Dashboard
 1. Navigate to the Code tab in the Site Dashboard on the Dev environment to check available updates:
@@ -32,11 +37,11 @@ If you prefer using the command line, you can apply updates with [Terminus](/doc
 
 ### Update a Specific Site
 
-```
-terminus upstream:updates:apply <site>.<env> --updatedb
+```bash
+terminus upstream:updates:apply site.env --updatedb
 ```
 
-Learn more about this command by running `terminus help upstream:updates:apply`.
+Replace `site` and `env` with your site name and the correct environment. Learn more about this command by running `terminus help upstream:updates:apply`.
 
 ### Update Multiple Sites
 
@@ -47,7 +52,64 @@ terminus sites:mass-update:apply
 For details, see [Terminus Mass Update Plugin](https://github.com/pantheon-systems/terminus-mass-update).
 
 ## Apply Upstream Updates Manually from the Command Line to Resolve Merge Conflicts
-If the automated core update doesn't appear to be working, it's possible there are conflicts with your codebase in the update. You'll need to manually resolve the conflict using the command line and a text editor.
+If the automated core update doesn't appear to be working, it's possible there are conflicts with your codebase in the update. You can resolve by overwriting your CMS core with the upstream, or attempt a manual merge conflict resolution.
+
+### Overwrite Core
+
+If you receive the error that you have conflicts while updating core, the fastest resolution is often the `-Xtheirs` flag. This will attempt to automatically resolve the conflicts with a preference for upstream changes and is safe to run if you don't have your own changes in any of the conflicting files (e.g. problems with `.gitignore` or `.htaccess`).
+
+<div class="alert alert-danger" role="alert">
+  <h4 class="info">Warning</h4>
+  <p markdown="1">This process can potentially cause loss of data. Be sure you have no custom code in your CMS core before proceeding.</p>
+</div>
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active"><a href="#d8" aria-controls="d8" role="tab" data-toggle="tab">Drupal 8</a></li>
+  <li role="presentation"><a href="#d7" aria-controls="d7" role="tab" data-toggle="tab">Drupal 7</a></li>
+  <li role="presentation"><a href="#d6" aria-controls="d6" role="tab" data-toggle="tab">Drupal 6</a></li>
+  <li role="presentation"><a href="#wp" aria-controls="wp" role="tab" data-toggle="tab">WordPress</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="d8">
+  <pre><code>
+  git pull -Xtheirs git://github.com/pantheon-systems/drops-8.git master
+  # resolve conflicts
+  git push origin master
+  </code></pre>
+  </div>
+  <div role="tabpanel" class="tab-pane" id="d7">
+  <pre><code>
+  git pull -Xtheirs git://github.com/pantheon-systems/drops-7.git master
+  # resolve conflicts
+  git push origin master
+  </code></pre>
+  </div>
+  <div role="tabpanel" class="tab-pane" id="d6">
+  <pre><code>
+  git pull -Xtheirs git://github.com/pantheon-systems/drops-6.git master
+  # resolve conflicts
+  git push origin master
+  </code></pre>
+  </div>
+  <div role="tabpanel" class="tab-pane" id="wp">
+  <pre><code>
+  git pull -Xtheirs git://github.com/pantheon-systems/WordPress.git master
+  # resolve conflicts
+  git push origin master
+  </code></pre>
+  </div>
+</div>
+
+Double-check the files before going forward to make sure no bugs were introduced.
+
+If this procedure fails with the message `Already up to date.` refer to [this troubleshooting section](#one-click-updates-do-not-appear-after-rewriting-git-history) to reset your git repository.
+
+### Merge Conflict Resolution
+
+This process lets you manually resolve the conflict using the command line and a text editor.
 
 1. Navigate to a [local clone of your site repository](/docs/git/#clone-your-site-codebase) using the command line, then add the applicable upstream as a [remote](https://git-scm.com/docs/git-remote) if you haven't done so already:
 
@@ -109,7 +171,7 @@ If the automated core update doesn't appear to be working, it's possible there a
 
 3. If a conflict is introduced, use the output provided to resolve. For example:
 
-  ```
+  ```bash
   git rebase pantheon-wordpress/master
   First, rewinding head to replay your work on top of it...
   Applying: Adjust rendering of version release notes
@@ -171,7 +233,7 @@ If you know your site's Custom Upstream has updated code, but it's not visible o
 
 This will trigger a "Code Cache Clear" to verify that the Site Dashboard has fetched the most recent commit. Please note that even after the workflow completes, it may take up to a minute before updates appear on the dashboard.
 
-If updates are still not showing on the site, it may be necessary to re-set the site's upstream via [Terminus](/docs/terminus/examples/#switch-upstreams). Please note that only the Site Owner or owning Organization Administrators can change a site's upstream. 
+If updates are still not showing on the site, it may be necessary to re-set the site's upstream via [Terminus](/docs/terminus/examples/#switch-upstreams). Please note that only the Site Owner or owning Organization Administrators can change a site's upstream.
 
 ### 503 Errors When Running Update.php and Installing Modules
 

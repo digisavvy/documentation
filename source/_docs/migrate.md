@@ -48,9 +48,7 @@ Pantheon provides a guided path for migrating existing sites to the platform, wh
   5. Name your new Pantheon site.
   6. Select an organization for the site (optional).
   7. Click **Create Site**.
-  8. Select **Generate Machine Token** and re-authenticate if prompted:
-
-   ![Authentication BlogVault migration](/source/docs/assets/images/dashboard/migration-authentication-prompt.png)
+  8. Select **Generate Machine Token** and re-authenticate if prompted.
   9. Select **Install on /wp-admin** to install and activate the plugin on your existing site. Keep the Pantheon Dashboard tab open in your browser.
   10. Copy the machine token from the Pantheon Dashboard, then navigate to **Pantheon Migration** within the WordPress Dashboard on your existing site. Paste the machine token and enter the site name.
   11. Click **Migrate**. You will receive an email when the migration completes. After the migration is complete, select **Visit the Site Dashboard** from the Site Dashboard on Pantheon:
@@ -83,9 +81,13 @@ Pantheon provides a guided path for migrating existing sites to the platform, wh
 
       ![Drupal create archive](/source/docs/assets/images/dashboard/drupal-guided-migrate.png)
 
-      <div class="alert alert-info">
-      <h4 class="info">Note</h4>
-      <p markdown="1">The Dashboard instructs you to put the archive on your existing website, but you can put the site archive on Dropbox, S3, or any number of other places. The important thing is that you have a site archive that can be downloaded via a publicly accessible URL.</p></div>
+      <div class="alert alert-info" markdown="1">
+      #### Note {.info}
+      `drush ard` is only available on Drush 8 and earlier.
+      </div>
+
+     The Dashboard instructs you to put the archive on your existing website, but you can put the site archive on Dropbox, S3, or any number of other places. The important thing is that you have a site archive that can be downloaded via a publicly accessible URL.
+
   9. Paste a publicly accessible URL to a download of your site archive. Change the end of Dropbox URLs from `dl=0` to `dl=1` so we can import your site archive properly.
   10. Click **Import Archive**. After the imported is complete, select **Visit the Site Dashboard** from the Site Dashboard on Pantheon:
 
@@ -98,6 +100,7 @@ Pantheon provides a guided path for migrating existing sites to the platform, wh
 Manually migrate your site to Pantheon when any of the following apply:
 
 * **Large Drupal Site Archive**: Site archive is greater than the guided migration import limit of 500MB.
+* **Large WordPress Site**: WordPress site exceeds 500MB.
 * **Preserve Git History**: You'd like to preserve your site's existing Git commit history.
 * **[WordPress Site Networks](/docs/migrate-wordpress-site-networks/)**
 * **Plugin install unavailable on existing WordPress site**: For example, if your existing site is hosted on WordPress.com, you'll be unable to install the Pantheon Migrations plugin.
@@ -113,7 +116,11 @@ If your code, database, and files have completed migrating, but your site is not
 
 Next, check [log files](/docs/logs/) to help identify and fix errors. Drupal or WordPress core is upgraded as part of migration, so you may have additional work to complete the upgrade.
 
-### Could not import code, the import file does not appear to contain a valid code directory. ###
+### Migrate from Acquia
+
+Acquia uses a nested docroot directory named `docroot`. When migrating from Acquia to Pantheon, you may choose to move the contents of `docroot` up and remove the folder, or rename it to `web` and set `web_docroot: true` in your `pantheon.yml` file. For more information on nested docroots, see [Serving Sites from the Web Subdirectory](/docs/nested-docroot/).
+
+### Could not import code, the import file does not appear to contain a valid code directory.
 
 **Cause:** The migration tool could not find Drupal or WordPress core files. This prevents the migration from completing because the site modules, plugins, and/or themes cannot be imported. This error also occurs when multiple `settings.php` files are present.
 
@@ -191,7 +198,7 @@ Next, check [log files](/docs/logs/) to help identify and fix errors. Drupal or 
 </div>
 
 
-### Could not import database, unable to locate a database dump. ###
+### Could not import database, unable to locate a database dump.
 **Cause:** The migration tool could not locate a MySQL database dump within the archive.
 
 **Solution:** Ensure that the archive contains a valid MySQL database dump.
@@ -201,22 +208,22 @@ Next, check [log files](/docs/logs/) to help identify and fix errors. Drupal or 
 
 **Solution:** This issue is documented on [Drupal.org](https://www.drupal.org/node/2496331). Edit the DB dump as described [here](https://www.drupal.org/node/2496331#comment-10029863).
 
-### Multiple file directories found within the import archive. ###
+### Multiple file directories found within the import archive.
 **Cause:** The migration tool found more than one potential location for files within the archive. This error also occurs if Drupal's private files directory is not placed within the public directory (`sites/default/files/private`).
 
 **Solution:** All files must be moved into the standard location for your site's CMS (`/sites/default/files` for Drupal, and `/wp-content/uploads` for WordPress). For more details, see [Non-Standard Files Locations](/docs/non-standard-file-paths).
 
-### Multiple site directories found within the import archive. ###
+### Multiple site directories found within the import archive.
 **Cause:** The migration tool found a multisite installation, which is not supported on the platform.
 
-**Solution:** Refer to [Extracting Sites from a Drupal Multisite](/docs/unwind-multisite/).
+**Solution:** Refer to [Extracting Sites from a Drupal Multisite](/docs/unwind-drupal-multisite/).
 
-### Multiple database dumps found within the import archive. ###
+### Multiple database dumps found within the import archive.
 **Cause:** The migration tool detected multiple MySQL database dumps within the archive.
 
 **Solution:** Ensure that a single MySQL dump is included within the archive.
 
-### Multiple code roots found within the import archive. ###
+### Multiple code roots found within the import archive.
 **Cause:**  The migration tool detected more than one potential location for the code root in the archive.
 
 **Solution:** Ensure that a single code root is included within the archive.
@@ -251,35 +258,24 @@ Go the to files directory of your existing site and check if the site archive wa
 
 ## Frequently Asked Questions (FAQs)
 ### How do I clone an existing Pantheon site?
-Make a copy of your WordPress site by following the [standard migration procedure](#migrate-existing-sites) described above. The procedure does not deviate for WordPress sites already hosted on Pantheon.
+You can make a copy of a WordPress site on Pantheon by following the [standard migration procedure](#migrate-existing-sites) described above. The procedure does not deviate for WordPress sites already hosted on Pantheon and is preferred since it's built into the Site Dashboard.
 
-For Drupal sites, during the **Create Site Archive** step of the migration process, you'll need to use [Terminus](/docs/terminus) to run `drush ard` to create an archive of your existing Pantheon site:
+Drupal 7, Drupal 8 and WordPress sites can use Terminus to clone one Pantheon site to another from the command line. This method requires you to [install and authenticate Terminus](/docs/terminus/install), then install the [Terminus Site Clone](https://github.com/pantheon-systems/terminus-site-clone-plugin){.external} plugin.
+
+Replace `<source>` and `<destination>` with target [site UUIDs](/docs/sites/#site-uuid) or site names, and specify target development environment in place of `<env>` (dev or multidev):
 
 ```bash
-terminus drush <site>.<env> -- ard --destination=sites/default/files/<RANDOM_HASH>.tgz
+terminus site:clone <source>.<env> <destination>.<env>
 ```
-
-<div class="alert alert-danger" role="alert">
-<h4 class="info">Warning</h4>
-<p markdown="1">We recommend using a random hash for the archive filename for security. Archive dumps contain sensitive information, so they should not be exposed using guessable filename patterns (like `BACKUP` or recent dates).</p>
-</div>
 
 <div class="alert alert-info" role="alert">
 <h4 class="info">Note</h4>
-<p markdown="1">Adjust paths as needed for sites with a [nested docroot](/docs/nested-docroot/) (e.g., `web/sites/default/files`).</p>
+<p markdown="1">File and database backups that exceed 500MBs are not supported by this method. Sites that exceed this limit must be cloned manually. For details, see [Manually Migrate Sites to Pantheon](/docs/migrate-manual/).</p>
 </div>
 
-Click **Continue Migration** and follow all remaining instructions within the guided migration process.
+### Does the WordPress migration cause downtime? 
+No, there is no downtime expected as part of the migration process. For detals, see related [BlogVault resource (question #13)](https://blogvault.net/migration-using-blogvault-faq/){.external}. Performance implications to a live site are similar to running a backup for the site. 
 
-**Be sure to delete the Drupal archive file (`<RANDOM_HASH>.tgz`) from your source site after cloning the site, using SFTP to access your site's files.**
-
-If your archive is larger than 256MB the Terminus operation to generate the archive will fail, resulting in the following error:
-
-```bash
-Connection to appserver.<ENV>.<Site UUID>.drush.in closed by remote host.
-```
-
-If your database and code compressed are less than 256MB you can exclude the files directory from export using the `--tar-options="--exclude=code/sites/default/files"` flag. Then you can download a backup of the files from the existing site and import the archive to the new site from the Site Dashboard, under **<span class="glyphicons glyphicons-server"></span> Database / Files** > **Import**.
 
 ### How do I migrate a local site to Pantheon?
 When asked for your current site URL, enter `https://example.com` and continue the migration procedure in the Site Dashboard.
@@ -316,7 +312,7 @@ If you'd like your existing WordPress site to get one-click updates from your [C
 
 1. The general process will be the same as a vanilla WordPress site, but start with **Create New Site** instead of **Migrate existing site**.
 
-2. Name your new site, and be sure to add it to the organization with access to the custom upstream you want to use.
+2. Name your new site, and be sure to add it to the organization with access to the Custom Upstream you want to use.
 
 3. On the next page, choose your Custom Upstream, and complete the installation.
 
@@ -341,7 +337,7 @@ If multiple SQL files are present the import will fail. Only provide one `.sql` 
 If multiple `settings.php` files are present the import will fail. Pantheon does not need the `settings.php` file to import the site. To prevent import problems, it's best to remove `settings.php`.
 
 ### How can I migrate from WP Engine?
-Follow the [standard procedure for migrating WordPress sites to Pantheon](#migrate-existing-sites) as described above. If your migration fails, you can try the following workaround:
+Follow the [standard procedure for migrating WordPress sites to Pantheon](#migrate-existing-sites) as described above. Note that WP Engine blocks the Let's Encrypt challenge file, so you should schedule a [maintenance window](/docs/guides/launch/domains/#maintenance-window) for HTTPS. If your migration fails, you can try the following workaround:
 
 1. Create and download a backup point from WP Engine.
 2. Unzip your site's backup point on your local machine.

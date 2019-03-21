@@ -24,7 +24,7 @@ The best solution is to communicate with the maintainer of the module or plugin 
 3. Move the directory you want to replace with a symlink. This serves two purposes; backing up any data that may otherwise be lost, and preventing the symlink from being nested inside the existing directory:
 
     ```bash
-    mv ./wp-content/path/plugin-excpects-write-to ~/backups/
+    mv ./wp-content/path/plugin-expects-write-to ~/backups/
     ```
 
     The command above moves the directory to a folder named backups in your home directory. `~/`. Replace this with an existing backup location.
@@ -74,6 +74,10 @@ The best solution is to communicate with the maintainer of the module or plugin 
 8. Deploy to Live and perform the plugin operation that creates the desired files, then confirm results.
 
 ## Troubleshooting
+
+### Removing a Symlink
+
+If a site no longer needs a symlink, because you uninstalled the plugin that required it for example, you can simply remove the symlink file from your codebase using `rm`. Move back any folders from the public files folder that should be tracked by version control.
 
 ### Modules That Verify Directories
 

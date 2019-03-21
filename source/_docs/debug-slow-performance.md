@@ -11,7 +11,9 @@ This article covers the most common causes for performance problems, demonstrate
 An often ignored cause of bad performance is [PHP errors within site code](/docs/php-errors/), as every single PHP error will slow your site down, including both notices and warnings that don’t crash your site.
 
 Here's an example of how PHP errors can slow down a site. This benchmark was performed with Drupal's [Generate Errors](https://drupal.org/project/generate_errors), with a TRUNCATE of of the `watchdog` table before each test to avoid tainting results from the aggregate. The results are equally applicable to WordPress or any PHP-based project.
-​ ![Benchmark example using Drupal's Generate Errors](/source/docs/assets/images/benchmark-example-generate-errors.png)
+
+![Benchmark example using Drupal's Generate Errors](/source/docs/assets/images/benchmark-example-generate-errors.png)
+
 Each loop executed user\_load(1, TRUE), then triggered the error. Times are rounded to 2 decimals.
 <table>
 <colgroup>
@@ -75,12 +77,16 @@ Compounding the issue, writing those errors to watchdog takes time and is a bloc
 Don’t shoot the messenger—disabling dblog will not fix bad code.
 
 As an example, if your slowest database operation is an INSERT to watchdog, then you should fix the PHP errors that are causing the writes. Notice that watchdog INSERTS is taking 70.6% of the execution time.
- ![Example of INSERT consuming execution time](/source/docs/assets/images/example-insert-consuming-execution-time.png)
+
+![Example of INSERT consuming execution time](/source/docs/assets/images/example-insert-consuming-execution-time.png)
+
 Learn more about [Log Files on Pantheon](/docs/logs).
 
 ## Too Many Database Queries
 The next performance killer is an excessive number of database queries per request. You can see that in the [New Relic Pro dashboard](/docs/new-relic) by going to the Map tab, which shows  how the various low-level components in your application are performing together.
- ![New Relic map tab](/source/docs/assets/images/new-relic-map.png)<br />
+
+![New Relic map tab](/source/docs/assets/images/new-relic-map.png)<br />
+
 Looking at an example, the average number of queries per request is shown in the lower-left, which in this case is 110 queries - a bit high. In the upper-right, the average query duration is shown and is actually very respectable.
 
 Therefore, with an average of 110 queries taking 1.19 milliseconds means on average, each request spends .132 seconds in the database. A second example with the same query duration, but with 239 queries per request, means .28 seconds in the database. A final example with 421 queries per request averaging 2.66 milliseconds equals **1.1** seconds per request in the database—monstrously slow.
@@ -100,7 +106,9 @@ Other caching systems that aren't on by default that should be enabled include [
 
 ### Using the Database to Cache in Drupal
 By default, Drupal uses the database as a caching backend. This is an example of a fairly high traffic site, and as you can see, database cache hits are the vast majority of the slow queries.
- ![New Relic most time consuming queries](/source/docs/assets/images/new-relic-most-time-consuming-queries.png)<br />
+
+![New Relic most time consuming queries](/source/docs/assets/images/new-relic-most-time-consuming-queries.png)<br />
+
 Also note the impact of watchdog INSERTs; this is why you should fix your PHP errors.
 
 One of the services Pantheon offers is [Redis as a caching backend](/docs/redis/), which is a key-value store and is optimized for this type of work. For a real world use-case, see [why we recommend Redis as a Drupal caching backend](https://www.pantheon.io/blog/why-we-recommend-redis-caching-backend){.external}.​
@@ -116,7 +124,7 @@ Cache misses are by nature slow - if something needs to be cached it's performed
 There are a large number of caches involved in every single request, including:
 
 - [Pantheon Global CDN](/docs/global-cdn-caching/) - Spread out across multiple servers, and the cache is not shared between servers.
-- [APC](/docs/alternative-php-cache/) - PHP has it's own opcode cache, which is not shared between application servers.
+- [APC](/docs/alternative-php-cache/) - PHP has its own opcode cache, which is not shared between application containers.
 - [Drupal](https://drupal.org/node/326504){.external} and [Redis](/docs/redis/) - Shared between your servers, but caches do expire and will need to be regenerated. Therefore, more traffic means more cache hits and faster performance, given the number of components involved.
 
 ## Too Much Traffic
@@ -141,7 +149,7 @@ Calling external services during regular requests can be a performance problem. 
 Sometimes these are necessary (e.g. getting a Twitter feed). The recommendation here is to avoid making external calls during regular requests as much as possible. As an alternative, you can make these calls via cron and store them in the database. The data can be refreshed with the desired frequency. The advantage is that even if the external service is slow or goes down your site won't be affected.
 
 ## Memory Errors
-An *Allowed memory size of <bytes\> exhausted* or *Out of Memory* error means that the application's PHP Memory Limit is trying to allocate more memory than the maximum amount of memory any single PHP request can utilize. Memory limits vary between [plans](/docs/platform-resources/), so sites that handle complex or large data sets, use many modules or plugins, or use memory-intensive features will need to plan accordingly and obtain the proper plan to avoid memory overruns. Exceeding this limit will kill the process, resulting in a failed request from the user's perspective.
+An *Allowed memory size of <bytes\> exhausted* or *Out of Memory* error means that the application's PHP Memory Limit is trying to allocate more memory than the maximum amount of memory any single PHP request can utilize. Memory limits vary between [plans](https://pantheon.io/plans/pricing-comparison){.external}, so sites that handle complex or large data sets, use many modules or plugins, or use memory-intensive features will need to plan accordingly and obtain the proper plan to avoid memory overruns. Exceeding this limit will kill the process, resulting in a failed request from the user's perspective.
 
 Debugging memory issues can be challenging. Here are some things to consider when addressing memory issues:
 
@@ -149,12 +157,14 @@ Debugging memory issues can be challenging. Here are some things to consider whe
 - Debug code locally using a PHP extension (like [Xdebug](https://xdebug.org/){.external} or [XHProf](http://php.net/manual/en/book.xhprof.php){.external}) or to help refactor code that could be leaking memory
 - Enabling [Redis](/docs/redis/) could boost site performance by providing an in-memory backend caching
 - [Update PHP version](/docs/php-versions/)
-- Use [New Relic](/docs/new-relic/) to identify issues
+- In case the source of the high memory usage is unclear, it might be helpful to use using a memory profiling module / plugin on the production site temporarily. Note that memory profiling most often has a performance overhead, so keep a close eye on the site while profiling. Usually a few hours will provide enough data.
 
-Please note that memory issues caused by custom code fall outside our [scope of support](/docs/getting-support/#scope-of-support).
+Please note that memory issues caused by custom code fall outside our [scope of support](/docs/support/#scope-of-support).
 
 ### Drupal
 Disabling modules that are unneeded will help reduce memory usage. The [Memory profiler](https://www.drupal.org/project/memory_profiler){.external} module can help troubleshoot issues by logging peak memory usage.
+
+GD Image library and UI modules such as Views UI, Feeds UI, etc are known causes for high memory usage. 
 
 ### WordPress
 Refer to [Debugging in WordPress](https://codex.wordpress.org/Debugging_in_WordPress){.external} from the WordPress.org Codex for information on debugging common issues.

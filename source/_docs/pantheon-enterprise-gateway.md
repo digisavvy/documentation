@@ -4,9 +4,9 @@ description: Configuring your Drupal or WordPress site to use the Pantheon Enter
 tags: [infrastructure, security]
 categories: []
 ---
-[Pantheon Enterprise Gateway](https://pantheon.io/features/secure-integration){.external} creates a secure tunnel between your firewall and your public facing website. This is available for sites within Enterprise and EDU+ organizations. [Contact us](https://pantheon.io/pantheon-enterprise){.external} for more information.
+[Pantheon Enterprise Gateway](https://pantheon.io/features/secure-integration){.external} creates a secure tunnel between your firewall and your public facing website. This is available for customers with an annual contract. [Contact us](https://pantheon.io/contact-us){.external} for more information.
 
-One of the affects of the elastic nature of Pantheon's platform is that sites have a [dynamic outgoing IP](/docs/outgoing-ips/). Container IP addresses are not constant, so direct connections aren't sustainable. This can be a problem if your site needs to communicate with another service that restricts traffic by source IP. The Pantheon Enterprise Gateway provides a solution.
+One of the effects of the elastic nature of Pantheon's platform is that sites have a [dynamic outgoing IP](/docs/outgoing-ips/). Container IP addresses are not constant, so direct connections aren't sustainable. This can be a problem if your site needs to communicate with another service that restricts traffic by source IP. The Pantheon Enterprise Gateway provides a solution.
 
 ## How It Works
 The Pantheon Enterprise Gateway uses TLS encryption to create a tunnel from the application containers to a pair of [F5 load balancers](https://f5.com/glossary/load-balancer){.external}, offering a consistent IP address range from which requests are made to your local service.
@@ -14,7 +14,7 @@ The Pantheon Enterprise Gateway uses TLS encryption to create a tunnel from the 
 ![pantheon enterprise gateway](/source/docs/assets/images/PEG_diagram.png)
 
 ## Create an Enterprise Gateway
-[Contact support](/docs/getting-support) and provide the following for each of your remote services:
+[Contact support](/docs/support) and provide the following for each of your remote services:
 
 * IP address
 * Port number
@@ -32,7 +32,7 @@ Once the gateway has been established, you must update your code to use it. This
 
 Once your Enterprise Gateway is configured, we update your site environment with the PHP constant `PANTHEON_SOIP_EXAMPLE`. This constant translates to the port number, internal to your Pantheon Site, through which your external service can be accessed.
 
-###  Example Connections with PHP Constants
+###  Example LDAP Connection with PHP Constants
 
 Please note that any code you're using to connect to the remote service must accept a PHP Constant for the port number. For example: If you have two LDAP servers, one for staff and another for students, you may choose `PANTHEON_SOIP_LDAP_STAFF` and `PANTHEON_SOIP_LDAP_STUDENTS` as names to identify the connections.
 
@@ -53,6 +53,7 @@ In cases where you cannot supply a direct PHP constant, consider wrapping it int
 ```nohighlight
 $externalconnection = “http://127.0.0.1:” . PANTHEON_SOIP_EXAMPLE;
 ```
+See also: [FAQ and Troubleshooting for LDAP](/docs/ldap-and-ldaps/#frequently-asked-questions)
 
 ## Considerations
 ### Set Reasonable Timeouts
@@ -71,6 +72,9 @@ WordPress and Drupal both work with the Pantheon Enterprise Gateway. If you’re
 ### Does the Pantheon Enterprise Gateway work from all site environments?
 
 Yes, it's configured on a site-by-site basis and works from all environments (Dev, Test, Live, and Multidev).
+
+### Does the Pantheon Enterprise Gateway support connections to multiple external resources?
+The PEG connects to the same external resource from all environments. If you need to connect to a separate resource, or test against a “test” version of the external resource, you will need an additional PEG configured to point to that resource. The additional PEG would be available to all environments.
 
 ### Is Pantheon Enterprise Gateway a replacement for authentication?
 

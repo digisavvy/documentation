@@ -3,8 +3,9 @@ title: Enabling Solr for WordPress
 description: Detailed information on using Apache Solr with WordPress.
 tags: [addons]
 categories: [wordpress]
+contributors: [cityofoaksdesign]
 ---
-[Apache Solr](/docs/solr) is a system for indexing and searching site content. Currently, all plans except for a Basic plan can use Solr.
+[Apache Solr](/docs/solr) is a system for indexing and searching site content. Currently, all plans except for a Basic plan can use Solr. {% include("content/solr-version.html") %}
 
 First, you will need to add the Index Server to your site. From your Dashboard, go to **Settings** > **Add Ons** > **Apache Solr Index Server: Add**. This will provision Apache Solr containers for every environment for your site. You are now ready to begin integrating with WordPress.
 
@@ -15,7 +16,9 @@ First, you will need to add the Index Server to your site. From your Dashboard, 
 
 ## Solr Search for WordPress
 
-Pantheon supports and maintains [Solr Search for WordPress (Solr Power)](https://wordpress.org/plugins/solr-power/).  This plugin replaces the [default search mechanism](https://codex.wordpress.org/Class_Reference/WP_Query#Search_Parameter) within WordPress while preserving the familiar integration methods within themes and widgets.
+Pantheon supports and maintains [Solr Search for WordPress (Solr Power)](https://wordpress.org/plugins/solr-power/){.external}.  This plugin replaces the [default search mechanism](https://codex.wordpress.org/Class_Reference/WP_Query#Search_Parameter){.external} within WordPress while preserving the familiar integration methods within themes and widgets.
+
+This plugins requires PHP version 7.1 or higher. See [Upgrade PHP versions](/docs/php-versions/) for more information on switching PHP versions.
 
 
 ## Install and Configure Plugin
@@ -30,6 +33,12 @@ Pantheon supports and maintains [Solr Search for WordPress (Solr Power)](https:/
  ```bash
  terminus wp <site>.<env> -- plugin install --activate solr-power
  ```
+ 
+ Or for WP Site Networks:
+ ```bash
+ terminus wp <site>.<env> -- plugin install --activate --network solr-power
+ ```
+ 
 3. From the WordPress Dashboard, navigate to **Solr Options** (previously under **Settings**). You should see your site's Solr Server details within the **Info** tab.
 
 4. Select **Indexing Options** from the navigation bar and configure desired indexing options for Solr. Click **Save Changes** after making modifications.
@@ -42,6 +51,11 @@ Pantheon supports and maintains [Solr Search for WordPress (Solr Power)](https:/
 
  ```bash
  terminus wp <site>.<env> -- solr index
+ ```
+ 
+ For WP Site Networks, you will need to index all your subsites individually:
+ ```bash
+ terminus wp <site>.<env> -- url=example.pantheonsite.io/subsite solr index
  ```
 
 6. Deploy the plugin to the site's Test and Live environments after validation and testing.
@@ -67,3 +81,7 @@ New, deleted, and modified posts and pages are automatically added to the Solr i
 
 ### Enable Solr for AJAX and WordPress Dashboard
 Use the `solr_allow_ajax` and the `solr_allow_admin` filters to allow Solr to work with AJAX and within the WordPress Dashboard.
+
+## Safely Remove Solr
+The following code changes are required before Solr can be safely uninstalled and disabled:
+{% include("content/remove-addons/wp-solr.html")%}

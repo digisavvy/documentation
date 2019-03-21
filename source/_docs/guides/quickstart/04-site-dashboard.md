@@ -1,6 +1,7 @@
 ---
 title: Quick Start
 subtitle: Site Dashboard
+description: In part four of our Quick Start guide, learn about the Pantheon Site Dashboard.
 quickstart: true
 anchorid: site-dashboard
 generator: pagination
@@ -21,7 +22,7 @@ image: launchGuide-twitterLarge
 
 In this lesson, we learn about the Dev, Test, Live workflow and explore a Pantheon Site Dashboard.
 
-1. Navigate back to the Pantheon **Site Dashboard**.
+To begin, navigate back to the Pantheon **Site Dashboard**.
 
 Every Pantheon site comes with 3 separate environments— Dev, Test, Live—which are represented by tabs on your dashboard.
 

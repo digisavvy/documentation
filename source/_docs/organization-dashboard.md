@@ -16,13 +16,10 @@ While creating a new site, any user in your [organization](/docs/organizations/)
 
 From the Site Dashboard, the Site Owner will want to:
 
-1. Click **Team**.
-2. Click **Add Supporting Organization**.
-3. Search for your Organization.
-4. Click **Add**.
+{% include("content/add-supporting-org.html")%}
 
 <div class="alert alert-info" role="alert">
-<h4 class="info">Note</h4><p markdown="1"> If your Organization is Enterprise, EDU+, or a Reseller, you will need to [contact support](/docs/getting-support/) to transfer sites to your Organization.</p>
+<h4 class="info">Note</h4><p markdown="1"> If your Organization is Enterprise, EDU+, or a Reseller, you will need to [contact support](/docs/support/) to transfer sites to your Organization.</p>
 </div>
 
 
@@ -41,17 +38,35 @@ Removing site team members follows the same process.
 
 ## Filter Sites
 
-At the Sites tab, the left panel contains groups of filters for limiting the sites list. Filters will appear in each group as sites are added that match the filters. You can add custom tags by selecting the checkbox next to the site, and clicking **Tags** and **Add Tag(s)**, then entering the tag.
+At the Sites tab, the left panel contains groups of filters for limiting the sites list. Filters will appear in each group as sites are added that match the filters.
+
+### Service Level
+This lets you filter sites by their [site plan](/docs/site-plan/).
+
+### Tags
+You can add custom tags by selecting the checkbox next to the site, and clicking **Tags** and **Add Tag(s)**, then entering the tag.
 
 <div class="alert alert-info" role="alert">
 <h4 class="info">Note</h4>
 <p>Tags are case-sensitve.
 </p>
 </div>
+
 To remove tags, select the site(s) you want to remove and follow the procedure above, this time selecting **Remove Tag**, or by hovering over the tag and clicking the **x** that appears.
+
+### Upstream
+Use this filter to sort sites by their upstream. This includes both [Pantheon upstreams](/docs/start-state/#pantheon-upstreams) and [Custom Upstreams](/docs/custom-upstream/).
 
 ### Code Status
 This filter shows which sites have core updates available, which ones are up to date, and which ones are unknown (e.g., managed by Composer). At this time, Organizations with over 800 sites do not have access to this filter, as they will time out loading.
+
+### Status
+
+This filter shows any sites that are [frozen](/docs/platform-considerations/#inactive-site-freezing), or awaiting upgrade to the [Global CDN](/docs/global-cdn/).
+
+### User in Charge
+Filters sites by the [user in charge](/docs/change-management/#roles-and-permissions).
+
 
 ## Add Users to Your Organization
 

@@ -1,6 +1,7 @@
 ---
 title: Build Tools
 subtitle: Write a New Test
+description: In step six of the Build Tools guide, learn how to use the pre-conifgured site tests, or customize your own.
 buildtools: true
 anchorid: behat
 generator: pagination
@@ -59,7 +60,7 @@ The following is an example of how to increase test coverage for your project by
         Given I am logged in as a user with the "administrator" role
         And I am on "/node/add/page"
         And I enter "Test Page" for "Title"
-        And I press "Save and publish"
+        And I press "Save"
         Then I should see "Basic page Test Page has been created."
     ```
     By following this pattern, you can add similar tests to confirm that the most important features of your site remain functional. To save time on test runs, remove the example tests that cover basic Drupal features, and only run tests on your core functionality.

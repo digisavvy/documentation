@@ -1,23 +1,22 @@
 ---
 title: Serving Sites from the Web Subdirectory
-description: Learn how to create an nested docroot to serve your Pantheon site from.
+description: Learn how to create a nested docroot to serve your Pantheon site from.
 tags: [pantheonyml, workflow]
 categories: []
 contributors:
  - ataylorme
 ---
 
-The docroot is the directory from which your site is served. On Pantheon, this defaults to the root directory of the site's codebase. Specifying `web_docroot: true` in your <a href="/docs/pantheon-yml/#site-local-configurations-pantheonyml" data-proofer-ignore>pantheon.yml</a> file or in the <a href="/docs/pantheon-yml/#custom-upstream-configurations-pantheonupstreamyml" data-proofer-ignore>pantheon.upstream.yml</a> file in your upstream allows you to serve site files from the `web` subdirectory of your site's code repository on all Pantheon environments.
+The docroot is the directory from which your site is served. On Pantheon, this defaults to the root directory of the site's codebase (`code`). Specifying `web_docroot: true` in your <a href="/docs/pantheon-yml/#site-local-configurations-pantheonyml" data-proofer-ignore>pantheon.yml</a> file or in the <a href="/docs/pantheon-yml/#custom-upstream-configurations-pantheonupstreamyml" data-proofer-ignore>pantheon.upstream.yml</a> file in your upstream allows you to serve site files from the `web` subdirectory of your site's code repository on all Pantheon environments (e.g. `code/web`).
+
+<div class="alert alert-danger" role="alert">
+<h4 class="info">Warning</h4>
+<p markdown="1">Changing the settings of the `web_docroot` property will prevent you from updating your site via one-click Dashboard updates. To continue to use one-click updates, switch to a [Custom Upstream](/docs/custom-upstream) that has the `web_docroot` property set in the `pantheon.upstream.yml` file.</p></div>
 
 ## Advantages and Use Cases
 While URLs are limited to the web docroot, PHP is not. Using a nested docroot allows you to put PHP files for use in your web application one level above the web docroot so they are accessible via PHP but not from the web.
 
 This is especially useful for third party dependencies, such as those installed and managed via [Composer](/docs/composer/).
-
-<div class="alert alert-info" role="alert">
-<h4 class="info">Note</h4>
-<p markdown="1">One-click Dashboard updates are only compatible with the nested `web` docroot feature when using a [Custom Upstream](/docs/custom-upstream) that has the `web_docroot` property set in the `pantheon.upstream.yml` file.</p>
-</div>
 
 ## Disable One-click Updates
 If you wish to stop using One-click Dashboard updates on a particular site, and instead intend to update your site with Composer, switch the site's upstream to an empty repository using [Terminus](/docs/terminus):
@@ -48,7 +47,7 @@ Enable nested docroot by adjusting your site's `pantheon.yml` file. Below we rec
 1. Set the Dev environment's connection mode to Git from within the Site Dashboard or via [Terminus](/docs/terminus):
 
  ```
- $ terminus connection:set <site>.<env> git
+ terminus connection:set <site>.<env> git
  ```
 
 2. [Clone the site's codebase](/docs/git/#clone-your-site-codebase), if you haven't already.
@@ -79,11 +78,13 @@ You'll need to move the CMS code into the `web` subdirectory, either manually or
 <!-- Tab panes -->
 <div class="tab-content">
   <div role="tabpanel" class="tab-pane active" id="d7" markdown="1">
+  The command below uses `find` to select all files at the document root, including "dot" files, but skips all directories and all files explicitly excluded in the `egrep` section. It then lists the specific core directories to move into the nested docroot. This may or may not produce the correct results, depending on what files you or your team has added. You can add files to be excluded in the list after `egrep`, and use the `-n` flag for `git mv` to perform a dry run first.
+
   [Clone the site's codebase](/docs/git/#clone-your-site-codebase), then execute the following from the project root directory:
 
   ```bash
   mkdir web
-  git mv -k $(find . -type f -maxdepth 1 | grep -v pantheon.yml) includes/ misc/ modules/ profiles/ scripts/ sites/ themes/ index.php web
+  git mv -k $(find . -maxdepth 1 -type f | egrep -v 'pantheon.yml|.gitignore|README.md|pantheon.upstream.yml') includes/ misc/ modules/ profiles/ scripts/ sites/ themes/ index.php web
   ```
   These commands create the `web` subdirectory, then use Git to move required files into the nested docroot.
 
@@ -108,11 +109,13 @@ You'll need to move the CMS code into the `web` subdirectory, either manually or
   </div>
 
   <div role="tabpanel" class="tab-pane" id="d8" markdown="1">
+  The command below uses `find` to select all files at the document root, including "dot" files, but skips all directories and all files explicitly excluded in the `egrep` section. It then lists the specific core directories to move into the nested docroot. This may or may not produce the correct results, depending on what files you or your team has added. You can add files to be excluded in the list after `egrep`, and use the `-n` flag for `git mv` to perform a dry run first.
+
   [Clone the site's codebase](/docs/git/#clone-your-site-codebase), then execute the following from the project root directory:
 
   ```bash
   mkdir web
-  git mv -k $(find . -type f -maxdepth 1 | grep -v pantheon.yml) core drush modules profiles sites themes vendor index.php web
+  git mv -k $(find . -maxdepth 1 -type f | egrep -v 'pantheon.yml|.gitignore|README.md|pantheon.upstream.yml') core drush modules profiles sites themes vendor index.php web
   ```
   These commands create the `web` subdirectory, then use Git to move required files into the nested docroot.
 
@@ -135,15 +138,17 @@ You'll need to move the CMS code into the `web` subdirectory, either manually or
   </div>
 
   <div role="tabpanel" class="tab-pane" id="wp" markdown="1">
+  The command below uses `find` to select all files at the document root, including "dot" files, but skips all directories and all files explicitly excluded in the `egrep` section. It then lists the specific core directories to move into the nested docroot. This may or may not produce the correct results, depending on what files you or your team has added. You can add files to be excluded in the list after `egrep`, and use the `-n` flag for `git mv` to perform a dry run first.
+
   [Clone the site's codebase](/docs/git/#clone-your-site-codebase), then execute the following from the project root directory:
 
   ```bash
   mkdir web
-  git mv -k $(find . -type f -maxdepth 1  | grep -v pantheon.yml) wp-includes wp-content wp-admin ./*.php web
+  git mv -k $(find . -maxdepth 1 -type f | egrep -v 'pantheon.yml|.gitignore|README.md|pantheon.upstream.yml') wp-includes wp-content wp-admin ./*.php web
   ```
   These commands create the `web` subdirectory, then use Git to move required files into the nested docroot.
 
-  Your directory structure should like like this afterwards:
+  Your directory structure should look like this afterwards:
 
   ```nohighlight
   ├── web
@@ -172,8 +177,7 @@ You'll need to move the CMS code into the `web` subdirectory, either manually or
   </div>
 </div>
 
-The idea here is that `find . -type f -maxdepth 1` finds all files at the document root, including the "dot" files, but skips all of the directories. We list the directories in Drupal/WordPress core out specifically, so that any user-defined directories stay behind. This may or may not produce the correct results, depending on what files you or your team has added. Please verify file relocation with `git status` after using one of these commands before committing and pushing.
-
+After using one of these commands, verify the new file locations with `git status` before committing and pushing.
 
 ## Troubleshooting
 

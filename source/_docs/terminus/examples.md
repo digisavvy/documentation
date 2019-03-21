@@ -1,6 +1,7 @@
 ---
 title: Terminus Manual
 subtitle: Example Usage
+description: Review examples of Terminus commands most frequently used by power users.
 terminusexample: true
 terminuspage: true
 terminustoc: true
@@ -12,6 +13,35 @@ permalink: docs/terminus/:basename/
 image: terminus-thumbLarge
 searchboost: 100
 ---
+
+## &lt;site&gt;.&lt;env&gt;
+Terminus command structure typically includes `<site>.<env>` in order to determine the target site and environment to execute against. Note that the `<>` symbols are part of the example, not to be included in your commands. For example, running the `env:clear-cache` command for the Live environment of a site labeled "Your Awesome Site":
+
+![terminus env:clear-cache your-awesome-site.live](/source/docs/assets/images/terminus-example-cc.png)
+
+<div class="panel panel-drop panel-guide" id="accordion">
+<div class="panel-heading panel-drop-heading">
+<a class="accordion-toggle panel-drop-title collapsed" data-toggle="collapse" data-parent="#accordion" data-proofer-ignore data-target="#identify-site"><h3 class="panel-title panel-drop-title info" style="cursor:pointer;"><span style="line-height:.9" class="glyphicons glyphicons-lightbulb"></span> Learn More</h3></a>
+</div>
+<div id="identify-site" class="collapse">
+<div class="panel-inner" markdown="1">
+<dl>
+  <dt>Site Label</dt>
+    <dd>Human readable, such as "Your Awesome Site", entered during site creation and displayed in the Site Dashboard.</dd>
+  <dt>Site Name: &lt;site&gt;</dt>
+    <dd markdown="1">Machine readable, such as "your-awesome-site", either derived automatically by the platform from the site label or uniquely defined during site creation via Terminus. This value is used to construct [platform domains](/docs/domains/#platform-domains). </dd>
+  <dt>Environment Name: &lt;env&gt;</dt>
+    <dd>Machine readable, such as "dev", "test", "live", or "bug123", which refers to the target site environment on Pantheon.</dd>
+</dl>
+
+
+You can also find your site's machine name using the Terminus command `site:info`, and the [site UUID](/docs/sites/#site-uuid). For example:
+
+![terminus site:info e9ad4349-621e-4be6-9f94-f9646069d9e7 --field name](/source/docs/assets/images/terminus-examples-field-name.png)
+</div>
+</div>
+</div>
+
 ## Applying Updates
 Quickly install updates to core, contributed modules, themes, and plugins from the command line with Terminus.
 
@@ -226,6 +256,8 @@ If your organization has a <a href="/docs/custom-upstream/">Custom Upstream</a>,
   <button class="btn btn-default btn-clippy" data-clipboard-target="#upstream-set">Copy</button>
   <figure><pre id="upstream-set"><code class="command bash" data-lang="bash">terminus site:upstream:set my-site "My Custom Upstream"</code></pre></figure>
   </div>
+  
+You can use any valid identifier (upstream name, upstream machine name, upstream UUID) returned in `terminus upstream:list` to set a new upstream. For example, the upstream name "My Custom Upstream" is used above. 
 
 As a safeguard, Terminus will prevent a framework switch such as moving from Drupal to WordPress or vice versa.
 

@@ -47,9 +47,8 @@ The name of the nested directory is not configurable.
 
 For more information, see [Serving Sites from the Web Subdirectory](/docs/nested-docroot/).
 
-
 ### PHP Version
-Override the upstreams default PHP version with the `php_version` property. PHP version is managed in version control and deployed along with the rest of your site's code to encourages a good best practice of testing before making a change on your Live site.
+Override the upstream's default PHP version with the `php_version` property. PHP version is managed in version control and deployed along with the rest of your site's code to encourage testing before making a change on your Live site.
 
 For example, to override the upstream default value at the site level to PHP 7:
 
@@ -71,6 +70,29 @@ drush_version: 8
 ```
 For more information, see [Managing Drush Versions on Pantheon](/docs/drush-versions/).
 
+### Filemount Path
+Pantheon provides a [cloud-based filesystem](/docs/files/) to store user-generated content and other website files. By default, we create a symlink to this filesystem at `/sites/default/files` (Drupal) or `/wp-content/uploads` (WordPress), but you can change the location with the `filemount` variable:
+
+```yaml
+filemount: /files
+```
+
+This creates a new symlink to the filesystem at the specified location. Note that this setting is only recommended when creating a custom upstream. Instead, consider using a symlink as described in [Non-Standard Files Locations](/docs/non-standard-file-paths/).
+
+Complete the following before deploying `filemount` (**required**):
+
+1. Reconfigure [Drupal 8](https://www.drupal.org/upgrade/file_public_path){.external}, [Drupal 7](https://www.drupal.org/docs/7/distributions/drupal-commons/installing-drupal-commons/configuring-file-system-settings-after){.external}, or [WordPress](https://codex.wordpress.org/Editing_wp-config.php#Moving_uploads_folder){.external} to use the new path
+2. Add path to the `.gitignore` file
+3. Configure a `private` subdirectory of the new path within [`protected_web_paths`](#protected-web-paths)
+
+#### Considerations
+* Recommended usage limited to [Custom Upstream Configurations](#custom-upstream-configurations) in `pantheon.upstream.yml`
+* Path must be relative to the site's docroot
+* Specify the exact path; limited selection of valid paths:
+  * `/files`
+  * `/sites/default/files`
+  * `/wp-content/uploads`
+
 ## Quicksilver Platform Integration Hooks
 Use the `pantheon.yml` file to define scripts you want executed automatically when a particular workflow is triggered on Pantheon by you or a teammate. For example, you can write a script to post a message to Slack whenever code is pushed to the Site Dashboard.
 
@@ -83,7 +105,11 @@ This file should only be edited in the Custom Upstream repository where it is de
 
 When the same configuration value is defined in both files, the value from `pantheon.yml` will override the value from `pantheon.upstream.yml` at the site-level.
 
+
+
 ## Troubleshooting
+
+### "Changes to pantheon.yml detected, but there was an error while processing it"
 
 We will reject a commit that includes a `pantheon.yml` error, with a message like:
 ```nohighlight
@@ -112,6 +138,9 @@ remote:
 remote:
 ```
 
+### Deploying Hotfixes
+Changes made to `pantheon.yml` **are not** detected when deployed as a [hotfix](/docs/hotfixes/). As a workaround, make a modification to your `pantheon.yml` file in a development environment (e.g, add a code comment), then deploy up to production using the standard Pantheon workflow.
+
 ## See Also
-- [Automating and Integrating your Pantheon Workflow with Quicksilver Platform Hooks](/docs/quicksilver/)  
+- [Automating and Integrating your Pantheon Workflow with Quicksilver Platform Hooks](/docs/quicksilver/)
 - [Upgrade PHP Versions](/docs/php-versions/)

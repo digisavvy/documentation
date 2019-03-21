@@ -5,7 +5,7 @@ earlynote: The documentation on this page discusses features and options that ar
 searchboost: 200
 ---
 
-Pantheon's new [Global CDN](https://pantheon.io/global-cdn){.external} is a core platform offering, with improved performance and security for customer sites. Content is served from 40+ global POPs (points of presence) where site pages and assets are cached, plus [free managed HTTPS](/docs/https) using [Let's Encrypt](https://letsencrypt.org){.external}.
+Pantheon's new [Global CDN](https://pantheon.io/global-cdn){.external} is a core platform offering, with improved performance and security for customer sites. Content is served from 60+ global POPs (points of presence) where site pages and assets are cached, plus [free managed HTTPS](/docs/https) using [Let's Encrypt](https://letsencrypt.org){.external}.
 
 <div class="enablement">
   <h4 class="info" markdown="1">[Agency DevOps Training](https://pantheon.io/agencies/learn-pantheon?docs){.external}</h4>
@@ -72,18 +72,18 @@ For more details, see [Clearing Caches for Drupal and WordPress](/docs/clear-cac
 
 ## Enabling the Global CDN
 
-If you don't see action required in your Domains / HTTPS tool, please [contact support](/docs/getting-support) to enable the upgrade.
+If you don't see action required in your Domains / HTTPS tool, please [contact support](/docs/support) to enable the upgrade.
 
 ### Upgrade Your Site
 
-1. Click the **Start Upgrade** button from the Site Dashboard.
+1. From the Site Dashboard, click the **Start Upgrade** button in the <span class="glyphicons glyphicons-global"></span> Domains / HTTPS section of the <span class="glyphicons glyphicons-cardio"></span> Live tab.
 2. It can take up to an hour for the new certificate to deploy across the entire CDN. If you want to avoid any possible hiccoughs you can wait 60 minutes before updating DNS.
 
   If you want to proceed without waiting, we strongly recommend testing locally before making the final DNS change:
 
       1. Click the "Details" button next to your site's bare domain.
       2. Copy the "A" record's IP address provided for the site's bare domain.
-      3. Add a line to your [local hosts file](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/){.external} with the IP address from the previous step followed by the domain name, for example:
+      3. Add a line to your [local hosts file](/docs/hosts-file/) with the IP address from the previous step followed by the domain name, for example:
 
         ```
         192.123.456.789 example.com
@@ -153,7 +153,7 @@ Yes, but because it adds additional complexity, we suggest you only do so if you
 You can, but as mentioned above you should identify a need for adding additional complexity first. If you're using Fastly TLS services with WordPress, you'll want to check for the `HTTP_FASTLY_SSL` header so that WordPress can build URLs to your CSS and JS assets correctly. Do this by adding the following to `wp-config.php`:
 
 ```php
-if (!empty( $SERVER['HTTP_FASTLY_SSL'])) {
-  $SERVER['HTTPS'] = 'on';
+if (!empty( $_SERVER['HTTP_FASTLY_SSL'])) {
+  $_SERVER['HTTPS'] = 'on';
 }
 ```

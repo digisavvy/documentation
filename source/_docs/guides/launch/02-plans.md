@@ -1,6 +1,7 @@
 ---
 title: Launch Essentials
 subtitle: Upgrade Site Plan
+description: Part two of our Launch Essentials guide covers upgrading your site to the proper plan to cover your needs.
 layout: guide
 anchorid: plans
 launch: true
@@ -30,8 +31,8 @@ If you plan to pay for the site or if you want to wait to transfer ownership, yo
 As the site owner, you’ll receive an email confirming the change to the site. After the site billing is processed, you’ll receive an updated invoice.
 
 ## Transfer Ownership and Billing for This Site
-{% include("content/transfer-owernship-billing-intro.html")%}
-{% include("content/transfer-owernship-billing-steps.html")%}
+{% include("content/transfer-ownership-billing-intro.html")%}
+{% include("content/transfer-ownership-billing-steps.html")%}
 
 <div class="panel panel-drop panel-guide" id="accordion">
   <div class="panel-heading panel-drop-heading">
@@ -40,13 +41,13 @@ As the site owner, you’ll receive an email confirming the change to the site. 
   <div id="host-specific1" class="collapse" style="padding:10px;">
     <div markdown="1">
 ## Ready to launch like the pros?
-Now that you've upgraded your site to paid plan, it's the perfect time to test how your site works in the wild.
+Now that you've upgraded your site to a paid plan, it's the perfect time to test how your site works in the wild.
 
 ### [New Relic APM Pro](/docs/new-relic/#activate-new-relic-apm-pro)
-In preparation for these tests, activate New Relic APM Pro so you can observe your site's performance like a maverick. This free service is accessible in the Pantheon Site Dashboard and offers a nearly real-time look into the performance of a web application.
+In preparation for these tests, activate New Relic APM Pro so you can observe your site's performance like a maverick. This service is accessible from the Pantheon Site Dashboard for all site plans except Basic, and it offers a nearly real-time look into the performance of a web application.
 
 ### [Performance Testing](/docs/load-and-performance-testing/#performance-testing)
-Measure your site's response time to proactively expose bottlenecks. We recommend running performance tests before you run load tests.
+Measure your site's response time to proactively expose potential bottlenecks. We recommend running performance tests before you run load tests.
 
 ### [Load Testing](/docs/load-and-performance-testing/#load-testing)
 Make sure your site can withstand peak traffic spikes after launch. This test should be performed on the Live environment before the site has launched, after performance testing.

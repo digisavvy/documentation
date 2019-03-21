@@ -60,48 +60,32 @@ earlynote: The documentation on this page discusses features and options that ar
 
 This section should outline any steps or services required before starting those in the doc. If there are other docs that should be completed first, list them here.
 
+Of particular note, any documentation that uses Terminus should reference it in this section, and link to the [Terminus Manual](/docs/terminus/).
+
 <div class="style-example" markdown="1">
 ## Before You Begin {.info}
-To get started, you need to activate [New Relic APM Pro](/docs/new-relic/) on Pantheon:
+Be sure that you have:
 
-1. Navigate to the **<span class="glyphicons glyphicons-wrench" aria-hidden="true"></span> Live** environment in your Site Dashboard, and click **<span class="glyphicons glyphicons-eye-open" aria-hidden="true"></span> New Relic**.
-2. Click the **Activate New Relic Pro** button.
-3. Use the **<span class="glyphicons glyphicons-new-window-alt" aria-hidden="true"></span> Visit Live Site** and browse your site for a few minutes to generate data in New Relic:
-
-  ![New Relic Enable and Generate Data](/source/docs/assets/images/pagerduty/new-relic-generate-data.png)
+- An existing WordPress site on Pantheon, or [create](https://dashboard.pantheon.io/sites/create){.external} one.
+- A [local clone](/docs/git/#clone-your-site-codebase) of your code repository.
+- An account with [Amazon Web Services (AWS)](https://aws.amazon.com/s3/){.external}. Amazon offers [free access](https://aws.amazon.com/free/){.external} to most of their services for the first year.
+- [Terminus](/docs/terminus) installed on your local computer.
 
 <hr class="source-code">
 ```markdown
 ## Before You Begin
-To get started, you need to activate [New Relic APM Pro](/docs/new-relic/) on Pantheon:
 
-1. Navigate to the **<span class="glyphicons glyphicons-wrench" aria-hidden="true"></span> Live** environment in your Site Dashboard, and click **<span class="glyphicons glyphicons-eye-open" aria-hidden="true"></span> New Relic**.
-2. Click the **Activate New Relic Pro** button.
-3. Use the **<span class="glyphicons glyphicons-new-window-alt" aria-hidden="true"></span> Visit Live Site** and browse your site for a few minutes to generate data in New Relic:
+Be sure that you have:
 
-  ![New Relic Enable and Generate Data](/source/docs/assets/images/pagerduty/new-relic-generate-data.png)
+- An existing WordPress site on Pantheon, or [create](https://dashboard.pantheon.io/sites/create){.external} one.
+- A [local clone](/docs/git/#clone-your-site-codebase) of your code repository.
+- An account with [Amazon Web Services (AWS)](https://aws.amazon.com/s3/){.external}. Amazon offers [free access](https://aws.amazon.com/free/){.external} to most of their services for the first year.
+- [Terminus](/docs/terminus) installed on your local computer.
 ```
 </div>
 
 ### Export Local Environment Variables
-Be kind. If you're writing a guide that will use one or more example variables the reader must replace when following along, you should walk them through exporting them to local environment variables.
-<div class="style-example" markdown="1">
-Export local environment variables to define your site name and Multidev environment to easily copy and paste example commands in the next sections (replace `pantheon-d8-composer-project`):
-<div class="copy-snippet">
-  <button class="btn btn-default btn-clippy" data-clipboard-target="#export-var1">Copy</button>
-  <figure><pre id="export-var1"><code class="command bash" data-lang="bash">export SITE=pantheon-d8-composer-project
-  export ENV=pr-slogan</code></pre></figure>
-</div>
-<hr class="source-code">
-```html
-Export local environment variables to define your site name and Multidev environment to easily copy and paste example commands in the next sections (replace `pantheon-d8-composer-project`):
-<div class="copy-snippet">
-  <button class="btn btn-default btn-clippy" data-clipboard-target="#export-var1">Copy</button>
-  <figure><pre id="export-var1"><code class="command bash" data-lang="bash">export SITE=pantheon-d8-composer-project
-  export ENV=pr-slogan</code></pre></figure>
-</div>
-```
-</div>
+Be kind. If you're writing a guide that will use one or more example variables the reader must replace when following along, you should walk them through exporting them to local environment variables. See the [Variables](#variables) section below for more details.
 
 
 ## Typography
@@ -251,37 +235,100 @@ Once the build finishes from the last step, active your new theme and rebuild th
 ```
 </div>
 
+### Variables
+
+When writing multi-step processes, repeated variables and constants should be defined before providing the first set of commands. If the doc has a "Before You Begin" section, define varables here. Provide them using the callout below, and follow common conventions (lowercase for variables, uppercase for constants).
+
+<div class="style-example" markdown="1">
+
+<div class="alert alert-export" role="alert">
+<h4 class="info">Exports</h4>
+<p markdown="1">This process uses [Terminus](/docs/terminus/) extensively. Before we begin, set the variables `$site` and `$env` in your terminal session to match your site name and the Dev environment:
+<pre>
+<code class="bash">export site=yoursitename
+export env=dev
+</code></pre>
+</p>
+</div>
+
+<hr class="source-code">
+
+```html
+<div class="alert alert-export" role="alert">
+<h4 class="info">Exports</h4>
+<p markdown="1">This process uses [Terminus](/docs/terminus/) extensively. Before we begin, set the variables `$site` and `$env` in your terminal session to match your site name and the Dev environment:
+<pre>
+<code class="bash">export site=yoursitename
+export env=dev
+</code></pre>
+</p>
+</div>
+```
+
+</div>
+
 ## Callouts
 There are two types of callouts used in our docs, notes and warnings:
 
 ### Notes
 <div class="style-example" markdown="1">
-<div class="alert alert-info" role="alert">
-  <h4 class="info">Note</h4>
-  <p markdown="1">Notes should identify important pieces of information the reader shouldn't miss.</p>
+<div class="alert alert-info" role="alert" markdown="1">
+#### Note {.info}
+Notes should identify important pieces of information the reader shouldn't miss.
 </div>
 <hr class="source-code">
 ```html
-<div class="alert alert-info" role="alert">
-  <h4 class="info">Note</h4>
-  <p markdown="1">Notes should identify important pieces of information the reader shouldn't miss.</p>
+<div class="alert alert-info" role="alert" markdown="1">
+#### Note {.info}
+Notes should identify important pieces of information the reader shouldn't miss.
 </div>
 ```
 </div>
 
 ### Warnings
 <div class="style-example" markdown="1">
-<div class="alert alert-danger" role="alert">
-  <h4 class="info">Warning</h4>
-  <p markdown="1">Warnings cover information critical to the reader, and highlight potential dangers, especially those that can cause data loss.</p>
+<div class="alert alert-danger" role="alert" markdown="1">
+#### Warning {.info}
+Warnings cover information critical to the reader and highlight potential dangers, especially those that can cause data loss.
 </div>
 <hr class="source-code">
 ```html
-<div class="alert alert-danger" role="alert">
-  <h4 class="info">Warning</h4>
-  <p markdown="1">Warnings cover information critical to the reader, and highlight potential dangers, especially those that can cause data loss.</p>
+<div class="alert alert-danger" role="alert" markdown="1">
+#### Warning {.info}
+Warnings cover information critical to the reader and highlight potential dangers, especially those that can cause data loss.
 </div>
 ```
+</div>
+
+### Success
+Success callouts are used infrequently, usually in guides with specific end results expected. Use success callouts to differentiate between two binary results.
+
+<div class="style-example" markdown="1">
+
+<div class="alert alert-danger">
+  <h4 class="info"><span class="alert-icon glyphicon glyphicon-remove"></span>  Incorrect DNS Configuration</h4>
+  <p markdown="1">![Incorrect vanity domain CNAME required DNS value](/source/docs/assets/images/dashboard/wrong-vanity-cname-dns.png)</p>
+</div>
+
+<div class="alert alert-success">
+  <h4 class="info"><span class="alert-icon glyphicon glyphicon-check"></span> Correct DNS Configuration</h4>
+  <p markdown="1">![Correct vanity domain CNAME required DNS value](/source/docs/assets/images/dashboard/correct-vanity-cname-dns.png)</p>
+</div>
+
+
+<hr class="source-code">
+```html
+<div class="alert alert-danger">
+  <h4 class="info"><span class="alert-icon glyphicon glyphicon-remove"></span>  Incorrect DNS Configuration</h4>
+  <p markdown="1">![Incorrect vanity domain CNAME required DNS value](/source/docs/assets/images/dashboard/wrong-vanity-cname-dns.png)</p>
+</div>
+
+<div class="alert alert-success">
+  <h4 class="info"><span class="alert-icon glyphicon glyphicon-check"></span> Correct DNS Configuration</h4>
+  <p markdown="1">![Correct vanity domain CNAME required DNS value](/source/docs/assets/images/dashboard/correct-vanity-cname-dns.png)</p>
+</div>
+```
+
 </div>
 
 ## Tabs
@@ -477,22 +524,22 @@ You can use markdown tables to describe availability based on service levels bef
 All plans except for a Basic plan can use Redis. Redis is available to Sandbox site plans for developmental purposes, but Redis will not be available going live on a Basic plan.
 
 | Plans         | Redis Support <a rel="popover" data-proofer-ignore data-toggle="tooltip" data-html="true" data-content="Available across all environments, including Multidevs."><em class="fa fa-info-circle"></em></a> |
-| ------------- | ------- |
-| Sandbox       | ✓       |
-| Basic         |         |
-| Performance   | ✓       |
-| Elite         | ✓       |
+| ------------- | -------------------------------------- |
+| Sandbox       | <span style="color:green">✔</span> |
+| Basic         | <span style="color:red">❌</span>  |
+| Performance   | <span style="color:green">✔</span> |
+| Elite         | <span style="color:green">✔</span> |
 <hr class="source-code">
 ```markdown
 ## Enable Redis
 All plans except for a Basic plan can use Redis. Redis is available to Sandbox site plans for developmental purposes, but Redis will not be available going live on a Basic plan.
 
 | Plans         | Redis Support <a rel="popover" data-proofer-ignore data-toggle="tooltip" data-html="true" data-content="Available across all environments, including Multidevs."><em class="fa fa-info-circle"></em></a> |
-| ------------- | ------- |
-| Sandbox       | ✓       |
-| Basic         |         |
-| Performance   | ✓       |
-| Elite         | ✓       |
+| ------------- | -------------------------------------- |
+| Sandbox       | <span style="color:green">✔</span> |
+| Basic         | <span style="color:red">❌</span>  |
+| Performance   | <span style="color:green">✔</span> |
+| Elite         | <span style="color:green">✔</span> |
 ```
 </div>
 
@@ -503,14 +550,14 @@ Use `✓` to indicate yes and leave the table data blank to indicate no.
 Tooltips are a great way to add additional information without cluttering up a section. For example, you can define jargon and even link out to an external resource without being distracting to the reader:
 
 <div class="style-example" markdown="1">
-Given two new sites with slugs <a class="pop" rel="popover" data-proofer-ignore data-toggle="popover" data-html="true" data-title="Slugs" data-content="Generally, <a class='external' href='https://codex.wordpress.org/Glossary#Slug'>slugs</a> are URL friendly descriptions for a post or a page in WordPress. In the context of WordPress Site Networks, a slug is a URL friendly description for a network site."><em class="fa fa-info-circle"></em></a> `first-site` and `second-site`, each configuration will result in the following URLs:
+Given two new sites with slugs {% include 'popovers/popover.twig' with {'poptitle': 'Slugs', 'popcontent': 'Generally, <a class="external" href="https://codex.wordpress.org/Glossary#Slug">slugs</a> are URL friendly descriptions for a post or a page in WordPress. In the context of WordPress Site Networks, a slug is a URL friendly description for a network site.'} %} `first-site` and `second-site`, each configuration will result in the following URLs:
 
 * Subdirectories: `example.com/first-site` and `example.com/second-site`.
 * Subdomains: `first-site.example.com` and `second-site.example.com`.
 <hr class="source-code">
 
 ```markdown
-Given two new sites with slugs <a class="pop" rel="popover" data-proofer-ignore data-toggle="popover" data-html="true" data-title="Slugs" data-content="Generally, <a class='external' href='https://codex.wordpress.org/Glossary#Slug'>slugs</a> are URL friendly descriptions for a post or a page in WordPress. In the context of WordPress Site Networks, a slug is a URL friendly description for a network site."><em class="fa fa-info-circle"></em></a> `first-site` and `second-site`, each configuration will result in the following URLs:
+Given two new sites with slugs {% verbatim %}{% include 'popovers/popover.twig' with {'poptitle': 'Slugs', 'popcontent': 'Generally, <a class="external" href="https://codex.wordpress.org/Glossary#Slug">slugs</a> are URL friendly descriptions for a post or a page in WordPress. In the context of WordPress Site Networks, a slug is a URL friendly description for a network site.'} %}{% endverbatim %} `first-site` and `second-site`, each configuration will result in the following URLs:
 
 * Subdirectories: `example.com/first-site` and `example.com/second-site`.
 * Subdomains: `first-site.example.com` and `second-site.example.com`.

@@ -1,6 +1,7 @@
 ---
 title: Launch Essentials
 subtitle: Launch Checks
+description: Part six of our Launch Essentials guide covers launch checks to perform before going live.
 launch: true
 anchorid: launch-check
 generator: pagination
@@ -24,6 +25,9 @@ image: getting-started-Largethumb
 3. Repeat these steps for the **<span class="glyphicons glyphicons-equalizer"></span> Test** and **<span class="glyphicons glyphicons-cardio"></span> Live** environments.
 
 For more information on this feature, see [Backups Tool](/docs/backups/).
+
+## Enable and Test Email Plugin/Module (Optional)
+If your site will be sending outgoing email, we *strongly* recommend using a third-party email service provider. See [Email on Pantheon](/docs/email/) for more information.
 
 ## Review Status Reports
 Launch with confidence by taking advantage of Pantheon's static site analysis service for Drupal and WordPress.
@@ -54,7 +58,7 @@ All plans except for a Basic plan can use Redis. Redis is available to Sandbox p
 ### [Configure Caching](/docs/global-cdn-caching/)
 Maximize performance on Pantheon by configuring your site's performance settings.
 
-Serving anonymous traffic from virtual memory allows a cached response to be returned to the browser without needing to access the application server, which in turns frees up resources to build more dynamic requests.
+Serving anonymous traffic from virtual memory allows a cached response to be returned to the browser without needing to access the application container, which in turns frees up resources to build more dynamic requests.
 
 ### [Test Cache](/docs/test-global-cdn-caching/)
 Learn how to test whether or not a page is being served from Pantheon's Global CDN by examining the HTTP headers from a response using curl.

@@ -7,15 +7,19 @@ categories: []
 Manually migrate your site to Pantheon when any of the following apply:
 
 * **Large Drupal Site Archive**: Site archive exceeds the import file size limit of 500MB.
+* **Large WordPress Site**: WordPress site exceeds 500MB.
 * **Preserve Git History**: You'd like to preserve your site's existing Git commit history.
 * **[WordPress Site Networks](/docs/guides/multisite/)**
 * **Plugin install unavailable on existing WordPress site**: For example, if your existing site is hosted on WordPress.com, you'll be unable to install the Pantheon Migrations plugin.
 * **Local WordPress Site**: If your WordPress site is only on your local machine and not yet live.
 * **Debug Failed Migration**: It can be helpful to migrate your code, database, and files separately if the standard migration procedure failed.
 
-<div class="alert alert-info">
-<h4 class="info">Note</h4>
-<p markdown="1">Use the [standard migration procedure](/docs/migrate) if none of the above apply to your project.</p></div>
+If none of the above apply to your project, use the [standard migration procedure](/docs/migrate/).
+
+<div class="alert alert-info" markdown="1">
+#### Note {.info}
+Site migrations are one of the services offered by our [Professional Services](/docs/professional-services/#site-migrations) team.
+</div>
 
 ## Before You Begin
 To ensure a successful migration, complete the following tasks on the source site first:
@@ -33,7 +37,7 @@ To ensure a successful migration, complete the following tasks on the source sit
   </div>
   <div id="advanced-before-you-begin" class="collapse" markdown="1" style="padding:10px;">
   #### .gitignore
-  Check the contents of your current codebase for existing `.gitignore` files. To be compatible with the platform, using the Pantheon version is advised.  Otherwise, attempts to import files to restricted paths could break the import process. See the platform-provided versions for [Wordpress](https://github.com/pantheon-systems/WordPress/blob/master/.gitignore), [Drupal 7](https://github.com/pantheon-systems/drops-7/blob/master/.gitignore), and [Drupal 8](https://github.com/pantheon-systems/drops-8).
+  Check the contents of your current codebase for existing `.gitignore` files. To be compatible with the platform, using the Pantheon version is advised.  Otherwise, attempts to import files to restricted paths could break the import process. See the platform-provided versions for [WordPress](https://github.com/pantheon-systems/WordPress/blob/master/.gitignore), [Drupal 7](https://github.com/pantheon-systems/drops-7/blob/master/.gitignore), and [Drupal 8](https://github.com/pantheon-systems/drops-8).
   #### Local Drupal configurations
   To preserve the database connection credentials for a site built on a local development environment, and to exclude them from version control, move your `settings.php` file to `settings.local.php` and add it to `.gitignore` so that it will be ignored by Git and included from Pantheon's `settings.php` when working on your site locally. Make sure that you can modify it, and restore the protections after the move:
 
@@ -91,19 +95,12 @@ Now that you have a new site on Pantheon, you're ready to add the major componen
 
 ## Import Your Code
 Your **code** is all custom and contributed modules or plugins, themes, and libraries. The codebase should not include the `wp-content/uploads` (WordPress) / `sites/default/files` (Drupal) directory, or any other static assets you do not want tracked by version control.
-  <div class="panel panel-drop panel-guide" id="accordion">
-    <div class="panel-heading panel-drop-heading">
-      <a class="accordion-toggle panel-drop-title collapsed" data-toggle="collapse" data-parent="#accordion" data-proofer-ignore data-target="#unique-anchor">
-        <h3 class="panel-title panel-drop-title" style="cursor:pointer;"><span style="line-height:.9" class="glyphicons glyphicons-lightbulb"></span> Code Directory Structure</h3>
-      </a>
-    </div>
-    <div id="unique-anchor" class="collapse" markdown="1" style="padding:10px;">
-      {% include("content/code.html")%}
-    </div>
-  </div>
+
+  {% include("content/code.html")%}
+
   <div class="alert alert-info">
   <h4 class="info">Note</h4>
-  <p markdown="1">If your existing site is already version controlled and you would like to preserve the commit history, import the code from the command line with Git. If you prefer to avoid the command line entirely, we suggest importing the codebase using an SFTP Client such as [Transmit](https://panic.com/transmit/){.external} or [Cyberduck](https://cyberduck.io/){.external}.</p></div>
+  <p markdown="1">If your existing site is already version controlled and you would like to preserve the commit history, import the code from the command line with Git using the instructions below. If you prefer to avoid the command line entirely, we suggest importing the codebase using an SFTP Client such as [Transmit](https://panic.com/transmit/){.external} or [Cyberduck](https://cyberduck.io/){.external}.</p></div>
 
 ### Using an SFTP Client
 1. Navigate to **<span class="glyphicons glyphicons-embed-close"></span> Code** in the **<span class="glyphicons glyphicons-wrench"></span> Dev** tab of your Site Dashboard. Confirm your Connection Mode is set to **SFTP**.
@@ -402,7 +399,7 @@ This error may occur when trying to merge Pantheon's codebase into your existing
 Not possible to fast-forward, aborting.
 ```
 
-Depending on your Git version, you may see the following error instead: 
+Depending on your Git version, you may see the following error instead:
 
 ```
 fatal: refusing to merge unrelated histories
@@ -416,7 +413,7 @@ rebase = TRUE
 ff = only
 ```
 
-In this case, you will want to remove `ff = only` from your `.gitconfig` file and try the merge command again. 
+In this case, you will want to remove `ff = only` from your `.gitconfig` file and try the merge command again.
 
 ## See Also
 Check our standard migration procedure for related <a href="/docs/migrate#frequently-asked-questions-faqs" data-proofer-ignore>Frequently Asked Questions</a> and [Troubleshooting](/docs/migrate#troubleshooting) tips.

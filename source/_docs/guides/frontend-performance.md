@@ -44,7 +44,9 @@ Reduce page rendering speeds from seconds to sub-seconds by caching content _and
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
   <li id="globaltab1" role="presentation" class="active"><a href="#global" aria-controls="global" role="tab" data-toggle="tab">Global</a></li>
-  <li id="natab1" role="presentation"><a href="#na" aria-controls="na" role="tab" data-toggle="tab">North America</a></li>
+  <li id="natab1" role="presentation"><a href="#na" aria-controls="na" role="tab" data-toggle="tab">N. America</a></li>
+  <li id="satab1" role="presentation"><a href="#sa" aria-controls="na" role="tab" data-toggle="tab">S. America</a></li>
+  <li id="aftab1" role="presentation"><a href="#af" aria-controls="na" role="tab" data-toggle="tab">Africa</a></li>
   <li id="eutab1" role="presentation"><a href="#eu" aria-controls="eu" role="tab" data-toggle="tab">Europe</a></li>
   <li id="asiatab1" role="presentation"><a href="#asia" aria-controls="asia" role="tab" data-toggle="tab">Asia</a></li>
   <li id="austab1" role="presentation"><a href="#aus" aria-controls="asia" role="tab" data-toggle="tab">Australia & New Zealand</a></li>
@@ -53,22 +55,30 @@ Reduce page rendering speeds from seconds to sub-seconds by caching content _and
 <!-- Tab panes -->
 <div class="tab-content no-border">
 <div role="tabpanel" class="tab-pane active" id="global" markdown="1">
-![Global CDN Map](/source/docs/assets/images/guides/front-end-performance/cdn-map.png){.cdn-map-container}
+![Global CDN Map](/source/docs/assets/images/guides/front-end-performance/CDN-map.png){.cdn-map-container}
 </div>
 <div role="tabpanel" class="tab-pane" id="na" markdown="1">
-![North America CDN Map](/source/docs/assets/images/guides/front-end-performance/cdn-map-na.png){.cdn-map-container}
-<p class="pop-desc">Ashburn, Atlanta, Boston, Chicago, Dallas, Denver, Los Angeles, Miami, Minneapolis, Montreal, New York, San Jose, Seattle, Toronto</p>
+![North America CDN Map](/source/docs/assets/images/guides/front-end-performance/CDN-map-NA.png){.cdn-map-container}
+<p class="pop-desc">Ashburn (x2), Atlanta (x2), Boston, Chicago (x2), Dallas, Denver, Los Angeles (x2), Miami, Minneapolis, Montreal, New York (x2), San Jose (x2), Seattle, Toronto</p>
+</div>
+<div role="tabpanel" class="tab-pane" id="sa" markdown="1">
+![South America CDN Map](/source/docs/assets/images/guides/front-end-performance/CDN-map-SA.png){.cdn-map-container}
+<p class="pop-desc">São Paulo, Rio de Janeiro</p>
+</div>
+<div role="tabpanel" class="tab-pane" id="af" markdown="1">
+![Africa CDN Map](/source/docs/assets/images/guides/front-end-performance/CDN-map-AF.png){.cdn-map-container}
+<p class="pop-desc">Cape Town, Johannesburg</p>
 </div>
 <div role="tabpanel" class="tab-pane" id="eu" markdown="1">
-![Europe CDN Map](/source/docs/assets/images/guides/front-end-performance/cdn-map-eu.png){.cdn-map-container}
-<p class="pop-desc">Amsterdam, Franfurt 2X, London 2X, Madrid, Paris, Stockholm</p>
+![Europe CDN Map](/source/docs/assets/images/guides/front-end-performance/CDN-map-EU.png){.cdn-map-container}
+<p class="pop-desc">Amsterdam, Frankfurt (x2), London (x2), Madrid, Paris, Stockholm</p>
 </div>
 <div role="tabpanel" class="tab-pane" id="asia" markdown="1">
-![Asia CDN Map](/source/docs/assets/images/guides/front-end-performance/cdn-map-asia.png){.cdn-map-container}
-<p class="pop-desc">Dubai, Hong Kong, Osaka, Singapore, Tokyo</p>
+![Asia CDN Map](/source/docs/assets/images/guides/front-end-performance/CDN-map-Asia.png){.cdn-map-container}
+<p class="pop-desc">Dubai, Hong Kong, Osaka, Singapore, Tokyo (x2)</p>
 </div>
 <div role="tabpanel" class="tab-pane" id="aus" markdown="1">
-![Australia CDN Map](/source/docs/assets/images/guides/front-end-performance/cdn-map-aus.png){.cdn-map-container}
+![Australia CDN Map](/source/docs/assets/images/guides/front-end-performance/CDN-map-AUZ.png){.cdn-map-container}
 <p class="pop-desc">Auckland, Brisbane, Melbourne, Perth, Sydney, Wellington</p>
 </div>
 </div>
@@ -80,7 +90,7 @@ Each POP caches all the resources (e.g., CSS and JavaScript) needed to render th
 Pantheon is designed to store cached copies of the full HTML pages coming out of Drupal and WordPress core by default. If non-logged in visitors to your site are not getting a near-instant delivery of HTML from the cache in our Global CDN, something is wrong. Full page cache depends on the HTTP Headers coming out of your site.
 
 ### Review Response Caching
-The following describes the expected cache behavior for sites running the Pantheon Advance Page Cache [WordPress plugin](https://wordpress.org/plugins/pantheon-advanced-page-cache/){.external} or [Drupal module](https://www.drupal.org/project/pantheon_advanced_page_cache){.external}. If you find that your page is not served from cache with similar headers and values, examine the response using Google's Developer tools and consult the next section for common cache busters and potential culprits.
+The following describes the expected cache behavior for sites running the Pantheon Advanced Page Cache [WordPress plugin](https://wordpress.org/plugins/pantheon-advanced-page-cache/){.external} or [Drupal module](https://www.drupal.org/project/pantheon_advanced_page_cache){.external}. If you find that your page is not served from cache with similar headers and values, examine the response using Google's Developer tools and consult the next section for common cache busters and potential culprits.
 
 <dt>age</dt>
 <dd markdown="1">The number of seconds cache has been available to serve the request. Any number greater than zero indicates that this response was served to the browser from cache.</dd>
@@ -399,7 +409,7 @@ Use the [Autoptimize](https://wordpress.org/plugins/autoptimize/){.external} plu
 
 ```php
 // Configure directory & filename of cached autoptimize files
-define('AUTOPTIMIZE_CACHE_CHILD_DIR','/uploads/resources/');
+define('AUTOPTIMIZE_CACHE_CHILD_DIR','/uploads/autoptimize/');
 define('AUTOPTIMIZE_CACHEFILE_PREFIX','aggregated_');
 ```
 
@@ -482,4 +492,9 @@ Other considerations:
 - Avoid mobile-specific subdomains and use responsive web design techniques.
 - A DNS service provider such as [Cloudflare](https://support.cloudflare.com/hc/en-us/articles/200170536-How-do-I-redirect-all-visitors-to-HTTPS-SSL-){.external} may allow speedier redirects in some circumstances, but it’s still faster not to redirect at all.
 - Avoid several chained redirects that make small changes such as redirecting to HTTPS, adding or removing WWW, or adding a trailing slash. Instead, [redirect to a primary domain](/docs/guides/launch/redirects/) that has all of these standardized.
-- Pantheon doesn’t read changes to the `.htaccess` file or support NGINX customization, so redirections via those methods will not work. For details, see [Using PHP as an htaccess Alternative](/docs/htaccess/).
+- Pantheon doesn’t read changes to the `.htaccess` file or support NGINX customization, so redirections via those methods will not work. For details, see [Configure Redirects](/docs/redirects/#php-vs-htaccess).
+
+## GZIP Compression
+By default, gzip compression is already enabled server-side. The response headers include `content-encoding: gzip` which will serve the site's HTML, stylesheets and JavaScipt files in a reduced size before sending it to the browser, resulting to a faster Time To First Byte (**TTFB**). Users don't need to modify any Nginx/.htaccess configuration, nor install any 3rd party plugins/modules for gzip compression.
+
+If there are any assets that are not being gzipped, most likely they are assets loaded from outside Pantheon.

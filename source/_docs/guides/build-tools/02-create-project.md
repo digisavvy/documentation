@@ -1,6 +1,7 @@
 ---
 title: Build Tools
 subtitle: Create a New Project
+description: In step two of the Build Tools guide, learn how to create your new project.
 anchorid: create-project
 layout: guide
 type: guide
@@ -18,26 +19,7 @@ image: buildToolsGuide-thumb
 ---
 In this section we'll use the Terminus Build Tools Plugin to create a new Pantheon Site, a corresponding GitHub repository, and configure CircleCI to run tests.
 
-1. Create a [CircleCI personal API token](https://circleci.com/account/api){.external} and export the value to the `CIRCLE_TOKEN` environment variable (replace `[REDACTED]`):
-
-    <div class="copy-snippet">
-    <button class="btn btn-default btn-clippy" data-clipboard-target="#circle-token">Copy</button>
-    <figure><pre id="circle-token"><code class="command bash" data-lang="bash">export CIRCLE_TOKEN=[REDACTED]</code></pre></figure>
-    </div>
-
-2. Create a [GitHub personal access token](https://github.com/settings/tokens){.external} with `repo` and `delete_repo` scopes, and export the value to the `GITHUB_TOKEN` environment variable (replace `[REDACTED]`):
-
-    <div class="copy-snippet">
-    <button class="btn btn-default btn-clippy" data-clipboard-target="#github-token">Copy</button>
-    <figure><pre id="github-token"><code class="command bash" data-lang="bash">export GITHUB_TOKEN=[REDACTED]</code></pre></figure>
-    </div>
-
-    <div class="alert alert-info">
-      <h4 class="info">Note</h4>
-      <p markdown="1">Github and Terminus tokens are stored in CircleCI as environment variables. If you need to replace a token, navigate to your [project settings page in CircleCI](https://circleci.com/docs/2.0/env-vars/#adding-environment-variables-in-the-app){.external}.</p>
-    </div>
-
-3. Create a new project (replace `pantheon-d8-composer-project` with the name of your new site):
+1. Create a new project (replace `pantheon-d8-composer-project` with the name of your new site):
 
     <div class="copy-snippet">
       <button class="btn btn-default btn-clippy" data-clipboard-target="#d8-create">Copy</button>
@@ -49,15 +31,20 @@ In this section we'll use the Terminus Build Tools Plugin to create a new Panthe
       <p markdown="1">Pantheon also maintains Composer based examples for [WordPress](https://github.com/pantheon-systems/example-wordpress-composer){.external} and [Drupal 7](https://github.com/pantheon-systems/example-drops-7-composer){.external} that are currently in alpha, requiring `--stability=alpha` in the command line options. While this guide demonstrates Drupal 8, the same workflow can be achieved on all frameworks.</p>
     </div>
 
-    Provide additional information as prompted, such as:
+    Provide additional information as prompted, such as Organization (if any), and tokens for GitHub and CircleCI access:
 
     ![Create Project Prompts](/source/docs/assets/images/pr-workflow/build-env-create-project-prompts.png)
+
+    This process will create a secure keypair, with the public key going to Pantheon and the private key stored in CircleCI. If you remove either key, you will need to [generate a new pair](/docs/ssh-keys/) manually to fix the build process.
 
     <div class="panel panel-drop panel-guide" id="accordion">
       <div class="panel-heading panel-drop-heading">
         <a class="accordion-toggle panel-drop-title collapsed" data-toggle="collapse" data-parent="#accordion" data-proofer-ignore data-target="#troubleshoot-install"><h3 class="info panel-title panel-drop-title" style="cursor:pointer;"><span style="line-height:.9" class="glyphicons glyphicons-wrench"></span> Troubleshooting</h3></a>
       </div>
       <div id="troubleshoot-install" class="collapse" markdown="1" style="padding:10px;">
+
+      {% include("content/composer-updating.html")%}
+
       ### Composer Content-Length Mismatch and/or Degraded Mode
       If you encounter an issue such as:
 
@@ -106,7 +93,7 @@ In this section we'll use the Terminus Build Tools Plugin to create a new Panthe
       </div>
     </div>
 
-4. Once your site is ready, the URL to your project page will be printed to your terminal window. Copy this address and paste it into a browser to visit your new project on GitHub:
+2. Once your site is ready, the URL to your project page will be printed to your terminal window. Copy this address and paste it into a browser to visit your new project on GitHub:
 
   ![Initial Project Page](/source/docs/assets/images/pr-workflow/initial-project-page.png)
 
